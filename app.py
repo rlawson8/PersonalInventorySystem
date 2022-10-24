@@ -1,5 +1,5 @@
 """Application entry point."""
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ def hello_world():
 
 @app.route('/home')
 def home():
-    return render_template("index.html", home=True)
+    return render_template("HomePage.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def log_in():
