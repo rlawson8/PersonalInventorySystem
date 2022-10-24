@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
 @app.route('/')
 def hello_world():
-    return render_template("index.html")
+    return render_template("HomePage.html")
 
 @app.route('/home')
 def home():
