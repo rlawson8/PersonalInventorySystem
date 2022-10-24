@@ -1,0 +1,56 @@
+.container-fluid {
+    margin-bottom: 0px;
+}
+p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    color: rgba(0, 78, 137, 0.8);
+}
+h3 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    color: #004E89;
+}
+button {
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+}
+.login {
+    margin-left: 88px;
+    margin-bottom: 27px;
+    margin-top: 208px;
+}
+.create {
+    margin-left: 88px;
+}
+.user {
+    width: 50px;
+    height: 50px;
+}
+.name {
+    font-size: 20px;
+    line-height: 55px;
+}
+.navbar-nav li a {
+    line-height: 55px;
+    font-size: 20px;
+}
+a {
+    color: white !important;
+}
+.row {
+    margin-left: 110px;
+}
+.bg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
