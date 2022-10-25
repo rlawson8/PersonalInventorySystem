@@ -23,6 +23,22 @@ button {
     color: white;
     font-size: 20px;
 }
+.btn {
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    padding-top: 27px;
+    
+}
+.btn:hover {
+    
+    background-color: #DDDBF1;
+    border-color: #383F51;
+ 
+}
 .login {
     margin-left: 88px;
     margin-bottom: 27px;
@@ -30,6 +46,7 @@ button {
 }
 .create {
     margin-left: 88px;
+    margin-bottom: 27px;
 }
 .user {
     width: 50px;
