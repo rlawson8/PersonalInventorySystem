@@ -15,14 +15,6 @@ h3 {
     line-height: 48px;
     color: #004E89;
 }
-button {
-    width: 238px;
-    height: 82px;
-    background: #383F51;
-    border-radius: 20px;
-    color: white;
-    font-size: 20px;
-}
 .btn {
     width: 238px;
     height: 82px;
@@ -40,13 +32,22 @@ button {
  
 }
 .login {
-    margin-left: 88px;
     margin-bottom: 27px;
     margin-top: 208px;
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
 }
 .create {
-    margin-left: 88px;
-    margin-bottom: 27px;
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
 }
 .user {
     width: 50px;
@@ -54,10 +55,8 @@ button {
 }
 .name {
     font-size: 20px;
-    line-height: 55px;
 }
 .navbar-nav li a {
-    line-height: 55px;
     font-size: 20px;
 }
 a {
