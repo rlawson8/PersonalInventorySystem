@@ -1,7 +1,82 @@
-{% extends "BootStrap.html" %}
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+  <title>Personal Inventory System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/login.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" style="margin-bottom: 0px; background: #004E89;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand name" href="#">Inventory Management App</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right ">
+      <li><a href="/design">Space Design</a></li>
+      <li><a href="/load">Load Item</a></li>
+      <li><a href="/find">Find Item</a></li>
+      <li><a href="#"><img src="../static/images/userimg.png" class="user"></a></li>
+    </ul>
+  </div>
+</nav>
 
 
-{% block title %}Log in{% endblock %}
-{% block content %}
-<h1>Log in</h1>
-{% endblock %}
+<div class="container">
+    <h2>Register</h2>
+    <form class="form-horizontal" action="/action_page.php">
+        <div class="form-group">
+            <div class="col">
+              <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col">
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <input type="email" class="form-control" id="email-repeat" placeholder="Email Confirmation" name="email-repeat">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">          
+                <input type="password" class="form-control" id="pwd" placeholder="Password" name="pwd">
+            </div>
+        </div>
+        <div class="form-group">        
+            <div class="col">
+                <input type="password" class="form-control" id="pwd-repeat" placeholder="Password Confirmation" name="pwd-repeat">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <button type="submit" class="btn btn-default">Register</button>
+            </div>
+        </div>
+        <div class="form-group">        
+            <div class="col">
+                <button type="submit" class="btn btn-default">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("ul.navbar-nav > li").click(function (e) {
+         $("ul.navbar-nav > li").removeClass("active");
+         $(this).addClass("active");
+          });
+      });
+  </script>
+</body>
+</html>
+
+
