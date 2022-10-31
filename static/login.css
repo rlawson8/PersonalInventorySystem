@@ -1,0 +1,95 @@
+.container-fluid {
+    margin-bottom: 0px;
+}
+#mainFormDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* min-height: 100vh; */
+}
+
+h2{
+    text-align: center;
+    font-size: 80px;
+    font-weight: bold;
+    color: #004E89;
+    padding-bottom: 40px;
+}
+.form-group{
+    padding-bottom: 40px;
+}
+.form-control{
+    width: 383px;
+    height: 55px;
+    border-radius: 20px;
+    background: #DDDBF1;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+
+}
+::placeholder{
+
+    color: #383F51;
+    opacity: 22%;
+}
+
+/* button {
+    width: 273px;
+    height: 55px;
+    background: #383F51;
+    border-width: 1px;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    
+} */
+.btn {
+    width: 273px;
+    height: 55px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    padding-top: 12px;
+    font-weight: bold;
+  
+    
+}
+.btn:hover {
+    
+    background-color: #DDDBF1;
+    border-color: #383F51;
+ 
+}
+button:hover {
+    background-color: #DDDBF1;
+    border-color: #383F51;
+}
+
+.create {
+    margin-left: 88px;
+    
+}
+.user {
+    width: 50px;
+    height: 50px;
+}
+.name {
+    font-size: 20px;
+}
+.navbar-nav li a {
+    font-size: 20px;
+}
+a {
+    color: white !important;
+}
+
+.bg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
