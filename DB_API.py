@@ -5,8 +5,8 @@ import sys
 def connectToDB():
     try:
         db = mariadb.connect(
-            user="root",
-            password="Mizzou2022!_IMT",
+            user="trevor",
+            password="Graduation",
             host="127.0.0.1",
             port=3306,
             database="PIS_DB"
@@ -147,7 +147,7 @@ def user_login(username, password):
 
 
 
-code = newUser('robertttt', 'robertttt@robtert.com', 'bubbadubbas')
+code = newUser('serverTest', 'test@robtert.com', 'bubbadubbas')
 print(code)
 code = user_login('bobby', 'wiejfoiwjf')
 print(code)
