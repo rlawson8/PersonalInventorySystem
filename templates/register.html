@@ -11,6 +11,7 @@
   <script type="text/javascript" src="../static/common.js"></script>
 </head>
 <body>
+
     <nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0px; background: #004E89;">
         <div class="container">
           <div class="navbar-header">
@@ -35,19 +36,30 @@
         </div><!-- /.container-fluid -->
       </nav>
 
+
 <div class="container" id="mainFormDiv">
-    <h2 name="headerTag">Log In</h2>
+    <h2 name="headerTag">Register</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div class="notification is-danger">
-            {{ messages[0] }}
+            {{ messages[0] }}. Go to <a href="{{ url_for('app.login') }}">login page</a>.
         </div>
     {% endif %}
     {% endwith %}
-    <form class="form-horizontal" action="/login" method="post" id="mainForm">
+    <form class="form-horizontal" action="/createAccount" onsubmit = "myValidation();" method="post" id="mainForm">
         <div class="form-group">
             <div class="col">
               <input type="text" class="form-control" id="username" placeholder="Username" name="username" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <input type="email" class="form-control" id="email-repeat" placeholder="Email Confirmation" name="email-repeat" required>
             </div>
         </div>
         <div class="form-group">
@@ -55,38 +67,37 @@
                 <input type="password" class="form-control" id="pwd" placeholder="Password" name="password" required>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col">
-                <button href="/createAccount" class="btn btn-default" value="reg" id="rButton">Register</button>
-            </div>
-        </div>
         <div class="form-group">        
             <div class="col">
-                <button type="submit" class="btn btn-default" value="log" id="lButton">Login</button>
+                <input type="password" class="form-control" id="pwd-repeat" placeholder="Password Confirmation" name="pwd-repeat" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <button type="submit" class="btn btn-default" value="reg" id="rButton">Register</button>
             </div>
         </div>
     </form>
 </div>
 <script>
-    // var name = window.localStorage.getItem("choice"); //change this to reflect what the backend is sending
-    // if(name == "login") {
-    //     loginSetup("email");
-    //     loginSetup("email-repeat");
-    //     loginSetup("pwd-repeat");
-    //     document.getElementsByName('username')[0].placeholder='Email/Username';
-    //     document.getElementsByName('headerTag')[0].innerHTML="Log In";
-    // }
-    // else {
-    //     loginSetup("lButton");
-    // }
-
-    // function loginSetup(id)
-    // {
-    //     if(typeof id === "object")
-    //         return id.parentNode.removeChild(id);
-    //     else
-    //         return (elem=document.getElementById(id)).parentNode.removeChild(elem);
-    // }
+    function myValidation() {
+        if (document.getElementById("email").value != document.getElementById("email-repeat").value)
+        {
+            alert('Your emails don\'t match or you\'re missing a field.');
+            event.preventDefault(); 
+            return false;
+        } 
+        else if (document.getElementById("pwd").value != document.getElementById("pwd-repeat").value){
+            alert('Your passwords don\'t match or you\'re missing a field.');
+            event.preventDefault(); 
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 </script>
 </body>
 </html>
+
+<!-- after this then load the login page so they can login -->

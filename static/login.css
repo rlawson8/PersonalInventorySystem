@@ -1,17 +1,14 @@
 .container-fluid {
     margin-bottom: 0px;
-    
 }
-.container {
+#mainFormDiv {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    /*min-height: 100vh;*/
-  }
-
-
+    /* min-height: 100vh; */
+}
 
 h2{
     text-align: center;
@@ -39,7 +36,7 @@ h2{
     opacity: 22%;
 }
 
-button {
+/* button {
     width: 273px;
     height: 55px;
     background: #383F51;
@@ -49,7 +46,7 @@ button {
     font-size: 20px;
     font-weight: bold;
     
-}
+} */
 .btn {
     width: 273px;
     height: 55px;
@@ -83,15 +80,12 @@ button:hover {
 }
 .name {
     font-size: 20px;
-    line-height: 55px;
 }
 .navbar-nav li a {
-    line-height: 55px;
     font-size: 20px;
 }
 a {
     color: white !important;
-    
 }
 
 .bg {

@@ -1,5 +1,8 @@
 """Application entry point."""
-from flask import Flask, render_template, request, url_for
+from crypt import methods
+from django.shortcuts import redirect
+from flask import Flask, render_template, request, url_for, flash
+from forms import hash, registration, login
 
 
 app = Flask(__name__)
@@ -18,15 +21,29 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def log_in():
     #check for POST submition of form
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        if login(username, password):
+            return redirect(url_for('app.home'))
+        else:
+            flash('Invalid Credentials please try again.') #this and the line above need to be tested one might work hopefully
+            return redirect(url_for('app.login'))
     return render_template("login.html")
 
-@app.route('/createAccount')
+@app.route('/createAccount', methods=['POST'])
 def create_account():
-    return "This is the account creation page. "
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        #check here to see if the email has already been used by performing a query
+        #if the above query is true flash the below message and direct back to the signup page using: return redirect(url_for('app.createAccount'))
+        #flash('Email address already exists')
+        #create a new user with the form data and hash the password so the plaintext version isn't saved this is where we canc all the method in forms.py
+        #add the new user to the database
+        return redirect(url_for('app.login'))
+    return render_template("register.html")
 
 @app.route('/design')
 def space_design():
