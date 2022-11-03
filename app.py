@@ -31,14 +31,15 @@ def log_in():
             return redirect(url_for('app.login'))
     return render_template("login.html")
 
-@app.route('/createAccount', methods=['POST'])
+@app.route('/createAccount', methods=['GET','POST'])
 def create_account():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        #check here to see if the email has already been used by performing a query
-        #if the above query is true flash the below message and direct back to the signup page using: return redirect(url_for('app.createAccount'))
+        #check here to see if the email and username has already been used by performing a query
+        #if the above query is true flash the below message and direct back to the signup page using: 
+        #return redirect(url_for('app.createAccount'))
         #flash('Email address already exists')
         #create a new user with the form data and hash the password so the plaintext version isn't saved this is where we canc all the method in forms.py
         #add the new user to the database
