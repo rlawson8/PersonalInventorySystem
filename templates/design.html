@@ -1,5 +1,163 @@
-{% extends "BootStrap.html" %}
+<!-- {% extends "BootStrap.html" %}
 {% block title %}Design{% endblock %}
 {% block content %}
 <h1>Design Page</h1>
-{% endblock %}
+{% endblock %} -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/design.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../static/common.js"></script>
+  <script>
+    addSpace = function(){
+        var p = prompt("Please enter the spaces name");
+        if (p != "" && p != null) {
+            var n = p.split(" ");
+            var newSpace = document.createElement("button");
+            newSpace.setAttribute('class','btn');
+            newSpace.setAttribute('name',n[0]);
+            newSpace.setAttribute('ondblclick',"openSpace(this.name)") 
+            newSpace.innerHTML = p;
+            document.getElementById("parentSpace").appendChild(newSpace);
+            //THIS IS WHERE THE POST REQUEST WILL GO TO ADD THE SPACE TO THE DATABASE
+        }
+        else if (p == null) {}
+        else {
+            var a = alert("Space name can't be empty try again");
+            addSpace();
+        }
+    }
+    addSubSpace = function(){
+        var p = prompt("Please enter the subspaces name");
+        if (p != "" && p != null) {
+            var n = p.split(" ");
+            var newSubSpace = document.createElement("button");
+            newSubSpace.setAttribute('class','btn');
+            newSubSpace.setAttribute('name',n[0]);
+            newSubSpace.setAttribute('ondblclick',"openSubSpace(this.name)") 
+            newSubSpace.innerHTML = p;
+            document.getElementById("parentSpace").appendChild(newSubSpace);
+            //THIS IS WHERE THE POST REQUEST WILL GO TO ADD THE ITEM TO THE DATABASE
+            //CHECK IF THIS SUBSPACE HAS ALREADY BEEN CREATED
+        }
+        else if (p == null) {}
+        else {
+            var a = alert("Item name can't be empty try again");
+            addSpace();
+        }
+    }
+    addItem = function(){
+        var p = prompt("Please enter the items name");
+        if (p != "" && p != null) {
+            var n = p.split(" ");
+            var newItem = document.createElement("a");
+            newItem.setAttribute('class','itemA  col-md-3 col-sm-6');
+            newItem.setAttribute('name',n[0]);
+            newItem.setAttribute('ondblclick',"openItems(this.name)") 
+            newItem.innerHTML = p;
+            document.getElementById("parentItem").appendChild(newItem);
+            //THIS IS WHERE THE POST REQUEST WILL GO TO ADD THE ITEM TO THE DATABASE
+            //CHECK IF THIS ITEM HAS ALREADY BEEN CREATED AND IF SO JUST ADD TO THE ITEMS COUNT IN THE DATABASE AND DISPLAY A MESSAGE THAT YOU DID
+        }
+        else if (p == null) {}
+        else {
+            var a = alert("Item name can't be empty try again");
+            addSpace();
+        }
+    }
+    openSpace = function(spaceName){
+        //THIS IS WHERE THE SUBSPACE GET REQUEST WILL GO ONCE A SPACE IS CLICKED AND A SPACE IS OPENED TO DISPLAY ALL THE SUBSPACES
+	    // window.location.href = "http://139.144.54.93:5000/design?space_id=" + spaceName;
+        // CHANGE THE H2 TAG NAMED headerTag TO WHATEVER THE SPACE NAME IS
+    }
+    openSubSpace = function(){
+        //THIS IS WHERE THE REQUEST TO GET ALL THE ITEMS AND DISPLAY THEM WHEN A SUBSPACE IS CLICKED WILL GO
+        var itemDiv = document.getElementById("itemDiv");
+        itemDiv.style.display = "block";
+    }
+    openItems = function(itemName){
+        //THIS IS WHERE THE REQUEST TO THE ITEM VIEW PAGE WILL BE HANDLED ONCE AN ITEM IS CLICKED
+        // window.location.href = "http://139.144.54.93:5000/details?item_id=" + itemName;
+    }
+    deleteElement = function(){
+        //HANDLE ELEMENT DELETION
+    }
+    renameItem = function(){
+        //HANDLE THE RENAMING OF ELEMENTS
+    }
+  </script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0px; background: #004E89;">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand name" href="/home">Personal Inventory System</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/design">Space Design</a></li>
+        <li><a href="/load">Load Item</a></li>
+        <li><a href="/find">Find Item</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container" id="mainFormDiv"> <!-- Populate this with the subspaces and spaces -->
+    <h2 name="headerTag">Spaces</h2>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <div id='parentSpace'></div>
+</div>
+
+<div class="container-fluid itemDisplay" id="itemDiv"> 
+    <h4>Items</h4>
+    <div class="innerItems" id="parentItem"> <!-- Populate this with the items -->
+        
+    </div>
+</div>
+
+<div class="footer"> <!--HOW DO WE WANT THESE BUTTONS TO COME AND GO BASED ON WHAT THE PAGE IS-->
+    <div class="col-xs-2">
+        <a onclick="addSpace()">Add Space</a></li>
+    </div>
+    <div class="col-xs-2">
+        <a onclick="addSubSpace()">Add Subspace</a></li> 
+    </div>
+    <div class="col-xs-2">
+        <a onclick="addItem()">Add Item</a></li>
+    </div>
+    <div class="col-xs-2">
+        <a onclick="renameItem()">Rename Item</a></li>
+    </div>
+    <div class="col-xs-2">
+        <a onclick="deleteElement()">Delete</a></li>
+    </div>
+</div>
+
+
+</script> 
+</body>
+</html>
