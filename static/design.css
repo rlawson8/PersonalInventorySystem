@@ -1,0 +1,90 @@
+html, body {
+    height: 100%;
+    overflow: scroll;
+}
+.navbar-nav li a {
+    font-size: 20px;
+}
+.navbar a {
+    color: white !important;
+}
+.footer a {
+    color: white !important;
+}
+.footer {
+    bottom: 0;
+    margin: 0 auto !important;
+    text-align: center !important;
+    width: 100% !important;
+    height: 40px;
+    position: absolute;
+    background-color: #004E89;
+}
+#mainFormDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+h2{
+    text-align: center;
+    font-size: 80px;
+    font-weight: bold;
+    color: #004E89;
+    padding-bottom: 40px;
+}
+.btn {
+    width: 273px;
+    height: 55px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    padding-top: 12px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    margin: 40px;
+}
+.btn:hover {
+    background-color: #DDDBF1;
+    border-color: #383F51;
+}
+button:hover {
+    background-color: #DDDBF1;
+    border-color: #383F51;
+}
+#bt2 {
+    display: none;
+}
+#in1 {
+    display: none;
+}
+.subspace {
+    display: none;
+}
+.col-xs-2{
+    margin-left: 3%;
+}
+.itemDisplay{
+    height: 100vh;
+}
+.innerItems{
+    background-color: lightgrey;
+    height: 100%;
+    overflow:scroll;
+    border: 1px solid #004E89;
+}
+#itemDiv{
+    display: none;
+}
+.itemA{
+    font-size: 20px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    color: black;
+}
+.col-md-3, .col-sm-6{
+    overflow:scroll;
+}
