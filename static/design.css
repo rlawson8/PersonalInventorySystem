@@ -2,12 +2,6 @@ html, body {
     height: 100%;
     overflow: scroll;
 }
-.navbar-nav li a {
-    font-size: 20px;
-}
-.navbar a {
-    color: white !important;
-}
 .footer a {
     color: white !important;
 }
