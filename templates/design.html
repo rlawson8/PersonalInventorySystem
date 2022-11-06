@@ -1,4 +1,4 @@
-<!-- {% extends "BootStrap.html" %}
+<!-- {% extends "navigation.html" %}
 {% block title %}Design{% endblock %}
 {% block content %}
 <h1>Design Page</h1>
@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="../static/design.css">
+  <link rel="stylesheet" href="../static/navigation.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../static/common.js"></script>
@@ -54,23 +55,7 @@
         }
     }
     addItem = function(){
-        var p = prompt("Please enter the items name");
-        if (p != "" && p != null) {
-            var n = p.split(" ");
-            var newItem = document.createElement("a");
-            newItem.setAttribute('class','itemA  col-md-3 col-sm-6');
-            newItem.setAttribute('name',n[0]);
-            newItem.setAttribute('ondblclick',"openItems(this.name)") 
-            newItem.innerHTML = p;
-            document.getElementById("parentItem").appendChild(newItem);
-            //THIS IS WHERE THE POST REQUEST WILL GO TO ADD THE ITEM TO THE DATABASE
-            //CHECK IF THIS ITEM HAS ALREADY BEEN CREATED AND IF SO JUST ADD TO THE ITEMS COUNT IN THE DATABASE AND DISPLAY A MESSAGE THAT YOU DID
-        }
-        else if (p == null) {}
-        else {
-            var a = alert("Item name can't be empty try again");
-            addSpace();
-        }
+        //THIS IS WHERE THE CALL TO THE LOAD ITEM PAGE WILL BE
     }
     openSpace = function(spaceName){
         //THIS IS WHERE THE SUBSPACE GET REQUEST WILL GO ONCE A SPACE IS CLICKED AND A SPACE IS OPENED TO DISPLAY ALL THE SUBSPACES
