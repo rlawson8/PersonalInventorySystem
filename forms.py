@@ -17,17 +17,15 @@ _tempSerial = 0
 
 def hash(password):
     #Adding pepper to password
-    password = password + _pepper;
+    password = password + _pepper
     #Hashing password
     safe = bcrypt.hashpw(password.encode('utf-8'), _salt)
 
     return safe
 
 def registration(username, email,  password):
-    #Adding pepper to password
-    password = password + _pepper;
     #Hashing password
-    safe = bcrypt.hashpw(password.encode('utf-8'), _salt)
+    hash(password)
     #Storing username
     _tempUser = username
     #Storing encrypted password
@@ -41,12 +39,10 @@ def registration(username, email,  password):
 def login(username, password):
     #temporary for testing
     _tempPass = 'Admin'
-    _tempPass = _tempPass + _pepper;
+    _tempPass = _tempPass + _pepper
     temp = bcrypt.hashpw(_tempPass.encode('utf-8'), _salt)
-    #Adding pepper to password
-    password = password + _pepper;
     #Hashing password
-    safe = bcrypt.hashpw(password.encode('utf-8'), _salt)
+    hash(password)
     #Comparing inputs to database
     if username == 'Admin':
         if safe == temp:
