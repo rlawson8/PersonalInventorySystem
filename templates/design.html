@@ -121,10 +121,12 @@
 
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
-        <div class="innerItems"> <!-- Populate this with the items -->
+        <div class="innerItems">
+        <div class="basic-grid"> <!-- Populate this with the items --!>
             {% for key, value in itemss.items() %}
-                <a href="http://127.0.0.1:5000/details?item_id={{ value }}">{{ key }}</a><br>
+                <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ value }}">{{ key }}</a></div>
             {% endfor %}
+        </div>
         </div>
     </div>
 
