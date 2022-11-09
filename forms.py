@@ -1,52 +1,36 @@
 #Using the BCrypt Algorith to hash and salt the password
 import bcrypt
+from DB_API import newUser, user_login
 
 #Adding pepper
 _pepper = 'Mizzou2022!_IMT'
 #Adding salt
 _salt = bcrypt.gensalt()
-#Number placeholde
-x = 0
-#Login attemps
-login_error = 0
-
-#Temporary values for testing
-_tempUser = "error"
-_tempPass = "error"
-_tempSerial = 0
 
 def hash(password):
     #Adding pepper to password
     password = password + _pepper
     #Hashing password
     safe = bcrypt.hashpw(password.encode('utf-8'), _salt)
-
+    #Returns the incrypted password
     return safe
 
 def registration(username, email,  password):
     #Hashing password
     hash(password)
-    #Storing username
-    _tempUser = username
-    #Storing encrypted password
-    _tempPass = safe
-    #Storing serial number
-    x = x + 1
-    _tempSerial = str(x).zfill(4)
-    #Storing systematic name
-    _tempsystematicName = username[:len(username)//2] + 'Space'
+    #Storing username, email, and encrypted password and holds answer from database
+    action = newUser(username, email, password)
+    #Returns the answer from the database
+    return action
 
 def login(username, password):
-    #temporary for testing
-    _tempPass = 'Admin'
-    _tempPass = _tempPass + _pepper
-    temp = bcrypt.hashpw(_tempPass.encode('utf-8'), _salt)
     #Hashing password
     hash(password)
-    #Comparing inputs to database
-    if username == 'Admin':
-        if safe == temp:
-            login_error = 0
-            return True
-    login_error = login_error + 1
-    return False
+    #Checks database if info is correct and stores answer
+    action = user_login(username, password)
+    #Conditional statements for answer from server since we probably shouldn't
+    #say if just the username or password is worng
+    if action == 403 or action == 409:
+        return False
+    else:
+        return True
