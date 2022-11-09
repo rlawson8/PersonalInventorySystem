@@ -5,15 +5,15 @@ import sys
 def connectToDB():
     try:
         db = mariadb.connect(
-            #user="trevor",
-            #password="Graduation",
+            user="trevor",
+            password="Graduation",
             host="127.0.0.1",
             port=3307,
-            #database="PIS_DB"
+            database="PIS_DB"
 
-            user="root",
-            password="root",
-            database="pis_db"
+            #user="root",
+            #password="root",
+            #database="pis_db"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
