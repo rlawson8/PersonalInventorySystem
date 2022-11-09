@@ -100,7 +100,7 @@
 </nav>
 
 <div class="container" id="mainFormDiv"> <!-- Populate this with the subspaces and spaces -->
-    <h2 name="headerTag">Spaces</h2>
+    <h2 name="headerTag">{{ space_name }}</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div class="notification is-danger">
@@ -108,7 +108,6 @@
         </div>
     {% endif %}
     {% endwith %}
-    <div id='parentSpace'></div>
 </div>
 
 <section class="basic-grid">
@@ -124,7 +123,7 @@
         <div class="innerItems">
         <div class="basic-grid"> <!-- Populate this with the items --!>
             {% for key, value in itemss.items() %}
-                <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ value }}">{{ key }}</a></div>
+                <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
             {% endfor %}
         </div>
         </div>

@@ -2,6 +2,7 @@
 from django.shortcuts import redirect
 from flask import Flask, render_template, request, url_for, flash
 from forms import registration, login
+from DB_API import *
 
 
 app = Flask(__name__)
@@ -59,7 +60,7 @@ def space_design():
 
 
 
-
+    """
     #test data to test the front end functionality
     subspaces_dict = {"Living Room" : "home",
                       "Kitchen" : "login",
@@ -68,9 +69,11 @@ def space_design():
                   "Fabreeze" : "23234",
                   "Paper Towel" : "2212",
                   "Lip Balm" : "9985"}
-    subspaces_list = ["Living Room", "Kitchen", "DiningRoom"]
-    items_list = ["Coasters", "Fabreeze", "Paper Towel", "Lip Balm"]
-    return render_template("design.html", subspaces = subspaces_dict, itemss = items_dict)
+    spaceName = "Bobert's Space"
+    """
+    space = get_space(1)
+
+    return render_template("design.html", subspaces = space.spaces, itemss = space.items, space_name = space.name)
 
 @app.route('/details')
 def detail_page():
