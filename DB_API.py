@@ -8,8 +8,8 @@ def connectToDB():
             user="trevor",
             password="Graduation",
             host="127.0.0.1",
-            port=3307,
-            database="PIS_DB"
+            port=3306,
+            database="Tabs_DB"
 
             #user="root",
             #password="root",
