@@ -1,13 +1,7 @@
-<!-- {% extends "navigation.html" %}
-{% block title %}Design{% endblock %}
-{% block content %}
-<h1>Design Page</h1>
-{% endblock %} -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Space Design!</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -18,10 +12,10 @@
   <script type="text/javascript" src="../static/common.js"></script>
   <script>
     addSpace = function(){
-        var p = prompt("Please enter the spaces name");
+        let p = prompt("Please enter the spaces name");
         if (p != "" && p != null) {
-            var n = p.split(" ");
-            var newSpace = document.createElement("button");
+            let n = p.split(" ");
+            let newSpace = document.createElement("button");
             newSpace.setAttribute('class','btn');
             newSpace.setAttribute('name',n[0]);
             newSpace.setAttribute('ondblclick',"openSpace(this.name)") 
@@ -31,15 +25,15 @@
         }
         else if (p == null) {}
         else {
-            var a = alert("Space name can't be empty try again");
+            let a = alert("Space name can't be empty try again");
             addSpace();
         }
     }
     addSubSpace = function(){
-        var p = prompt("Please enter the subspaces name");
+        let p = prompt("Please enter the subspaces name");
         if (p != "" && p != null) {
-            var n = p.split(" ");
-            var newSubSpace = document.createElement("button");
+            let n = p.split(" ");
+            let newSubSpace = document.createElement("button");
             newSubSpace.setAttribute('class','btn');
             newSubSpace.setAttribute('name',n[0]);
             newSubSpace.setAttribute('ondblclick',"openSubSpace(this.name)") 
@@ -50,7 +44,7 @@
         }
         else if (p == null) {}
         else {
-            var a = alert("Item name can't be empty try again");
+            let a = alert("Item name can't be empty try again");
             addSpace();
         }
     }
@@ -64,7 +58,7 @@
     }
     openSubSpace = function(){
         //THIS IS WHERE THE REQUEST TO GET ALL THE ITEMS AND DISPLAY THEM WHEN A SUBSPACE IS CLICKED WILL GO
-        var itemDiv = document.getElementById("itemDiv");
+        let itemDiv = document.getElementById("itemDiv");
         itemDiv.style.display = "block";
     }
     openItems = function(itemName){
@@ -81,7 +75,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0px; background: #004E89;">
+<nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0; background: #004E89;">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -117,32 +111,42 @@
     <div id='parentSpace'></div>
 </div>
 
-<div class="container-fluid itemDisplay" id="itemDiv"> 
+<section class="basic-grid">
+    {% for key, value in subspaces.items() %}
+        <div class="card">
+            <a href="http://127.0.0.1:5000/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p><br>{{ key }}</p></a>
+        </div>
+    {% endfor %}
+</section>
+
+<div class="container-fluid itemDisplay">
     <h4>Items</h4>
-    <div class="innerItems" id="parentItem"> <!-- Populate this with the items -->
-        
+        <div class="innerItems"> <!-- Populate this with the items -->
+            {% for key, value in itemss.items() %}
+                <a href="http://127.0.0.1:5000/details?item_id={{ value }}">{{ key }}</a><br>
+            {% endfor %}
+        </div>
     </div>
-</div>
+
 
 <div class="footer"> <!--HOW DO WE WANT THESE BUTTONS TO COME AND GO BASED ON WHAT THE PAGE IS-->
     <div class="col-xs-2">
-        <a onclick="addSpace()">Add Space</a></li>
+        <a onclick="addSpace()">Add Space</a>
     </div>
     <div class="col-xs-2">
-        <a onclick="addSubSpace()">Add Subspace</a></li> 
+        <a onclick="addSubSpace()">Add Subspace</a>
     </div>
     <div class="col-xs-2">
-        <a onclick="addItem()">Add Item</a></li>
+        <a onclick="addItem()">Add Item</a>
     </div>
     <div class="col-xs-2">
-        <a onclick="renameItem()">Rename Item</a></li>
+        <a onclick="renameItem()">Rename Item</a>
     </div>
     <div class="col-xs-2">
-        <a onclick="deleteElement()">Delete</a></li>
+        <a onclick="deleteElement()">Delete</a>
     </div>
 </div>
 
 
-</script> 
 </body>
 </html>

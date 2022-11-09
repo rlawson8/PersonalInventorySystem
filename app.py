@@ -1,5 +1,4 @@
 """Application entry point."""
-from crypt import methods
 from django.shortcuts import redirect
 from flask import Flask, render_template, request, url_for, flash
 from forms import registration, login
@@ -57,7 +56,21 @@ def create_account():
 
 @app.route('/design')
 def space_design():
-    return render_template("design.html")
+
+
+
+
+    #test data to test the front end functionality
+    subspaces_dict = {"Living Room" : "home",
+                      "Kitchen" : "login",
+                      "Dining Room" : "createAccount"}
+    items_dict = {"Coasters" : "2343",
+                  "Fabreeze" : "23234",
+                  "Paper Towel" : "2212",
+                  "Lip Balm" : "9985"}
+    subspaces_list = ["Living Room", "Kitchen", "DiningRoom"]
+    items_list = ["Coasters", "Fabreeze", "Paper Towel", "Lip Balm"]
+    return render_template("design.html", subspaces = subspaces_dict, itemss = items_dict)
 
 @app.route('/details')
 def detail_page():

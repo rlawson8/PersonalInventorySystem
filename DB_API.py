@@ -10,6 +10,10 @@ def connectToDB():
             host="127.0.0.1",
             port=3306,
             database="PIS_DB"
+
+            #user="root",
+            #password="root",
+            #database="pis_db"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
