@@ -73,7 +73,7 @@ def space_design():
     """
     space = get_space(1)
 
-    return render_template("design.html", subspaces = space.spaces, itemss = space.items, space_name = space.name)
+    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
 
 @app.route('/details')
 def detail_page():

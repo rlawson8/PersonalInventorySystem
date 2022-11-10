@@ -172,6 +172,14 @@ button:hover {
     outline: none;
   }
   
+  .form-container select {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+  
   /* Set a style for the submit/login button */
   .form-container .btn {
     background-color: #04AA6D;

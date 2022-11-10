@@ -17,11 +17,15 @@
     renameItem = function(){
         //HANDLE THE RENAMING OF ELEMENTS
     }
-    function openForm() {
+    function openAddForm() {
         document.getElementById("myForm").style.display = "block";
+    }
+    function openDeleteForm() {
+        document.getElementById("deleteForm").style.display = "block";
     }
     function closeForm() {
         document.getElementById("myForm").style.display = "none";
+        document.getElementById("deleteForm").style.display = "none";
     }
   </script>
 </head>
@@ -78,7 +82,7 @@
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
     <section class="basic-grid"> <!-- Populate this with the items -->
-        {% for key, value in itemss.items() %}
+        {% for key, value in items.items() %}
             <div class="card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
         {% endfor %}
     </section>
@@ -96,18 +100,32 @@
         </form>
     </div>
 
-<div class="footer"> <!--HOW DO WE WANT THESE BUTTONS TO COME AND GO BASED ON WHAT THE PAGE IS-->
-    <div class="col-xs-3">
-        <a onclick="openForm()">Add Space</a>
+    <div class="form-popup" id="deleteForm">
+        <form action="/design" method="post" class="form-container">
+            <h1>Delete Item/Space</h1>
+            <label for="choice"><b>Selecte One</b></label>
+            <select name="choice">
+                <option value="item">Item</option>
+                <option value="space">Space</option>
+            </select>
+            
+            <label for="spaceName"><b>Space/Item Name</b></label>
+            <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required>
+        
+            <button type="submit" class="btn">Save</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
     </div>
-    <div class="col-xs-3">
+
+<div class="footer"> <!--HOW DO WE WANT THESE BUTTONS TO COME AND GO BASED ON WHAT THE PAGE IS-->
+    <div class="col-xs-4">
+        <a onclick="openAddForm()">Add Space</a>
+    </div>
+    <div class="col-xs-4">
         <a href="/load">Add Item</a>
     </div>
-    <div class="col-xs-3">
-        <a onclick="renameItem()">Rename Item</a>
-    </div>
-    <div class="col-xs-3">
-        <a onclick="deleteElement()">Delete</a>
+    <div class="col-xs-4">
+        <a onclick="openDeleteForm()">Delete</a>
     </div>
 </div>
 
