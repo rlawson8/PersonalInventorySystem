@@ -11,65 +11,17 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../static/common.js"></script>
   <script>
-    addSpace = function(){
-        let p = prompt("Please enter the spaces name");
-        if (p != "" && p != null) {
-            let n = p.split(" ");
-            let newSpace = document.createElement("button");
-            newSpace.setAttribute('class','btn');
-            newSpace.setAttribute('name',n[0]);
-            newSpace.setAttribute('ondblclick',"openSpace(this.name)") 
-            newSpace.innerHTML = p;
-            document.getElementById("parentSpace").appendChild(newSpace);
-            //THIS IS WHERE THE POST REQUEST WILL GO TO ADD THE SPACE TO THE DATABASE
-        }
-        else if (p == null) {}
-        else {
-            let a = alert("Space name can't be empty try again");
-            addSpace();
-        }
-    }
-    addSubSpace = function(){
-        let p = prompt("Please enter the subspaces name");
-        if (p != "" && p != null) {
-            let n = p.split(" ");
-            let newSubSpace = document.createElement("button");
-            newSubSpace.setAttribute('class','btn');
-            newSubSpace.setAttribute('name',n[0]);
-            newSubSpace.setAttribute('ondblclick',"openSubSpace(this.name)") 
-            newSubSpace.innerHTML = p;
-            document.getElementById("parentSpace").appendChild(newSubSpace);
-            //THIS IS WHERE THE POST REQUEST WILL GO TO ADD THE ITEM TO THE DATABASE
-            //CHECK IF THIS SUBSPACE HAS ALREADY BEEN CREATED
-        }
-        else if (p == null) {}
-        else {
-            let a = alert("Item name can't be empty try again");
-            addSpace();
-        }
-    }
-    addItem = function(){
-        //THIS IS WHERE THE CALL TO THE LOAD ITEM PAGE WILL BE
-    }
-    openSpace = function(spaceName){
-        //THIS IS WHERE THE SUBSPACE GET REQUEST WILL GO ONCE A SPACE IS CLICKED AND A SPACE IS OPENED TO DISPLAY ALL THE SUBSPACES
-	    // window.location.href = "http://139.144.54.93:5000/design?space_id=" + spaceName;
-        // CHANGE THE H2 TAG NAMED headerTag TO WHATEVER THE SPACE NAME IS
-    }
-    openSubSpace = function(){
-        //THIS IS WHERE THE REQUEST TO GET ALL THE ITEMS AND DISPLAY THEM WHEN A SUBSPACE IS CLICKED WILL GO
-        let itemDiv = document.getElementById("itemDiv");
-        itemDiv.style.display = "block";
-    }
-    openItems = function(itemName){
-        //THIS IS WHERE THE REQUEST TO THE ITEM VIEW PAGE WILL BE HANDLED ONCE AN ITEM IS CLICKED
-        // window.location.href = "http://139.144.54.93:5000/details?item_id=" + itemName;
-    }
     deleteElement = function(){
         //HANDLE ELEMENT DELETION
     }
     renameItem = function(){
         //HANDLE THE RENAMING OF ELEMENTS
+    }
+    function openForm() {
+        document.getElementById("myForm").style.display = "block";
+    }
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
     }
   </script>
 </head>
@@ -110,40 +62,51 @@
     {% endwith %}
 </div>
 
-<section class="basic-grid">
-    {% for key, value in subspaces.items() %}
-        <div class="card">
-            <a href="http://127.0.0.1:5000/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p><br>{{ key }}</p></a>
-        </div>
-    {% endfor %}
-</section>
+<div class="container-fluid">
+    <h4>Spaces</h4>
+    <section class="basic-grid">
+        {% for key, value in subspaces.items() %}
+            <div class="card">
+                <a href="http://127.0.0.1:5000/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p><br>{{ key }}</p></a>
+            </div>
+        {% endfor %}
+    </section>
+</div>
+
+<hr/>
 
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
-        <div class="innerItems">
-        <div class="basic-grid"> <!-- Populate this with the items --!>
-            {% for key, value in itemss.items() %}
-                <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
-            {% endfor %}
-        </div>
-        </div>
-    </div>
+    <section class="basic-grid"> <!-- Populate this with the items -->
+        {% for key, value in itemss.items() %}
+            <div class="card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
+        {% endfor %}
+    </section>
+</div>
 
+    <div class="form-popup" id="myForm">
+        <form action="/design" method="post" class="form-container">
+          <h1>Add Space</h1>
+      
+          <label for="spaceName"><b>Space Name</b></label>
+          <input type="text" placeholder="Enter Space Name" name="spaceName" required>
+      
+          <button type="submit" class="btn">Save</button>
+          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
 
 <div class="footer"> <!--HOW DO WE WANT THESE BUTTONS TO COME AND GO BASED ON WHAT THE PAGE IS-->
-    <div class="col-xs-2">
-        <a onclick="addSpace()">Add Space</a>
+    <div class="col-xs-3">
+        <a onclick="openForm()">Add Space</a>
     </div>
-    <div class="col-xs-2">
-        <a onclick="addSubSpace()">Add Subspace</a>
+    <div class="col-xs-3">
+        <a href="/load">Add Item</a>
     </div>
-    <div class="col-xs-2">
-        <a onclick="addItem()">Add Item</a>
-    </div>
-    <div class="col-xs-2">
+    <div class="col-xs-3">
         <a onclick="renameItem()">Rename Item</a>
     </div>
-    <div class="col-xs-2">
+    <div class="col-xs-3">
         <a onclick="deleteElement()">Delete</a>
     </div>
 </div>

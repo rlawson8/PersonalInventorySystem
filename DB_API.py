@@ -101,9 +101,39 @@ def newUser(username, email, password):
     return 200
 
 
+def load_item(name, group, description, quantity, consumable, image):
+    cur = connectToDB()
+    new_item_id = max_item_id(cur)
 
+    try:
+        cur.execute("SELECT space_id FROM space WHERE space_name =?",(group))
+        spaceId = cur.fetchone()
+        if spaceId == None:
+            raise Exception('e')
+        else:
+            continue
 
+    except:
+        #Returns 409 if the space doesn't exist.
+        return 409
+    cur.execute("SELECT item_name FROM item WHERE item_name =? AND space_id =?", (name, spaceId))
+    check = cur.fetchone()
+    if(check == None):
+        cur.execute("INSERT INTO item (item_id, item_name, description, quantity, consumable, image_location, space_id) VALUES (?, ?, ?, ?, ?, ?, ?)",(new_item_id, name, description, quantity, consumable, image, spaceId))
+    else:
+        cur.execute("UPDATE item SET quantity = quantity + 1 WHERE item_name =? AND space_id =?", (name, spaceId))
+        
+    return 200
 
+#Creates a new primary key for an item.
+def max_item_id(cur):
+    cur.execute("SELECT MAX(item_id) FROM item;")
+    for x in cur:
+        # print(x)
+        prev_id = x
+    prev_id = prev_id[0]
+    new_item_id = prev_id + 1
+    return new_item_id
 
 
 #Creates a new primary key for a space. Will be used when creating new users for root spaces and with creating new spaces.
