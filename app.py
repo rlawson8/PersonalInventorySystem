@@ -1,14 +1,23 @@
 """Application entry point."""
-from django.shortcuts import redirect
 from flask import Flask, render_template, request, url_for, flash
 from forms import registration, login
 from DB_API import *
-
+from flask_login import LoginManager, login_required, current_user, login_user
 
 app = Flask(__name__)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+app.config['SECRET_KEY'] = '_5#y2LF4Q8z*n*xec]/'
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = load_user_helper(user_id)
+    return user
 
 @app.route('/')
 def hello_world():
@@ -24,11 +33,16 @@ def log_in():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if login(username, password):
-            return redirect(url_for('app.home'))
+
+        user_object = login(username, password)
+        print(user_object)
+        if user_object != None:
+            login_user(user_object)
+            space = get_space(user_object.rootSpace)
+            return render_template('design.html', subspaces = space.spaces, itemss = space.items, space_name = space.name)
         else:
             flash('Invalid Credentials please try again.') #this and the line above need to be tested one might work hopefully
-            return redirect(url_for('app.login'))
+            return render_template("login.html")
     return render_template("login.html")
 
 @app.route('/createAccount', methods=['GET','POST'])
@@ -52,10 +66,11 @@ def create_account():
             return render_template("register.html")
         else:
             flash('Thank you for creating your account '+username)
-            return render_template("HomePage.html")
+            return render_template("login.html")
     return render_template("register.html")
 
 @app.route('/design')
+@login_required
 def space_design():
 
 
@@ -81,8 +96,24 @@ def detail_page():
 
 @app.route('/load')
 def loading_page():
+
     return "This is the loading page."
 
 @app.route('/find')
 def query_page():
     return "This is the query page."
+
+
+
+"""Things to do.
+Add back end for design page. -- Trevor
+
+Interface with the buttons for add space, and delete. -- Reid
+
+Customize login required to not throw internal server error. --Trevor
+
+Finish loading page tasks. 
+
+Hydrate
+"""
+

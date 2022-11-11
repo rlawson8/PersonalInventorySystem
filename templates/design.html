@@ -109,6 +109,7 @@
     {% endif %}
     {% endwith %}
 </div>
+<h1>{{ current_user.get_id() }}</h1>
 
 <section class="basic-grid">
     {% for key, value in subspaces.items() %}
@@ -122,6 +123,9 @@
     <h4>Items</h4>
         <div class="innerItems">
         <div class="basic-grid"> <!-- Populate this with the items --!>
+            {% if itemss.items() == NULL %}
+                <h5>No Items</h5>
+            {% endif %}
             {% for key, value in itemss.items() %}
                 <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
             {% endfor %}
@@ -147,7 +151,5 @@
         <a onclick="deleteElement()">Delete</a>
     </div>
 </div>
-
-
 </body>
 </html>
