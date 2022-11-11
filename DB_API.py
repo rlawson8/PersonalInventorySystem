@@ -318,5 +318,4 @@ def load_user_helper(user_id):
 
 
 #code = user_login('testsubject1', 'abc123')
-code = load_user_helper('testsubject1')
-print(code)
+
