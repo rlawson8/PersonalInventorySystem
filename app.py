@@ -60,10 +60,10 @@ def create_account():
         #add the new user to the database
         if action == 409:
             flash('Username already exists')
-            return render_template("register.html")
+            return redirect(url_for('register.html'))
         elif action == 410:
             flash('Email address already exists')
-            return render_template("register.html")
+            return redirect(url_for("register.html"))
         else:
             flash('Thank you for creating your account '+username)
             return render_template("login.html")
@@ -88,7 +88,7 @@ def space_design():
     """
     space = get_space(1)
 
-    return render_template("design.html", subspaces = space.spaces, itemss = space.items, space_name = space.name)
+    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
 
 @app.route('/details')
 def detail_page():
