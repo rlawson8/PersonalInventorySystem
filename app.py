@@ -60,18 +60,31 @@ def create_account():
         #add the new user to the database
         if action == 409:
             flash('Username already exists')
-            return redirect(url_for('register.html'))
+            return render_template('register.html')
         elif action == 410:
             flash('Email address already exists')
-            return redirect(url_for("register.html"))
+            return render_template("register.html")
         else:
             flash('Thank you for creating your account '+username)
             return render_template("login.html")
     return render_template("register.html")
 
-@app.route('/design')
+@app.route('/design', methods=['GET','POST'])
 @login_required
 def space_design():
+    if request.method == 'POST':
+        spaceName = request.form['spaceName']
+        parentSpaceName = request.form['parentSpaceName']
+        action = addSpace(spaceName, parentSpaceName)
+
+        if action == 409:
+            flash('Space name already exists')
+            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+        else if action == 410:
+            flash('Parent space does not exist')
+            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+        else:
+            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
 
 
 
@@ -103,7 +116,11 @@ def loading_page():
 def query_page():
     return "This is the query page."
 
-
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return render_template("HomePage.html")
 
 """Things to do.
 Add back end for design page. -- Trevor

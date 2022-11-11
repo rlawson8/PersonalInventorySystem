@@ -49,7 +49,17 @@
         <li><a href="/design">Space Design</a></li>
         <li><a href="/load">Load Item</a></li>
         <li><a href="/find">Find Item</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
+        <li class="dropdown show">
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              {% if current_user.is_authenticated %}
+                <a class="dropdown-item" href="/login">Login</a><br>
+                <a class="dropdown-item" href="/register">Register</a><br>
+              {% else %}
+                <a class="dropdown-item" href="/logout">Logout</a>
+              {% endif %}
+            </div>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -82,19 +92,10 @@
 
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
-<<<<<<< HEAD
-        <div class="innerItems">
-        <div class="basic-grid"> <!-- Populate this with the items --!>
-            {% if itemss.items() == NULL %}
-                <h5>No Items</h5>
-            {% endif %}
-            {% for key, value in itemss.items() %}
-                <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
-            {% endfor %}
-        </div>
-        </div>
-=======
     <section class="basic-grid"> <!-- Populate this with the items -->
+        {% if itemss.items() == NULL %}
+            <h5>No Items</h5>
+        {% endif %}
         {% for key, value in items.items() %}
             <div class="card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
         {% endfor %}
@@ -104,14 +105,16 @@
     <div class="form-popup" id="myForm">
         <form action="/design" method="post" class="form-container">
           <h1>Add Space</h1>
-      
+
+          <label for="parentSpaceName"><b>Parent Space Name (Put N/A if you are in the default space)</b></label>
+          <input type="text" placeholder="Enter Parent Space Name" name="parentSpaceName" required>
+
           <label for="spaceName"><b>Space Name</b></label>
           <input type="text" placeholder="Enter Space Name" name="spaceName" required>
       
           <button type="submit" class="btn">Save</button>
           <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
->>>>>>> eebe7684ded13f99845d40bf6224dc054424658c
     </div>
 
     <div class="form-popup" id="deleteForm">

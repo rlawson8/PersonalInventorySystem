@@ -222,6 +222,39 @@ def user_login(username, password):
         #Returns 409 if username can't be found.
         return 409
 
+
+
+def addSpace(spaceName, parentSpaceName):
+    cur = connectToDB()
+    new_space_id = max_space_id(cur)
+
+    try:
+        cur.execute("SELECT space_id FROM space WHERE space_name =?",(parentSpaceName))
+        parentSpaceId = cur.fetchone()
+        if parentSpaceId == None:
+            raise Exception('e')
+        else:
+            pass
+    except:
+        #Returns 409 if the parent space doesn't exist.
+        return 410
+
+    try:
+        cur.execute("SELECT space_id FROM space WHERE space_name =?",(spaceName))
+        spaceId = cur.fetchone()
+        if parentSpaceId != None:
+            raise Exception('e')
+        else:
+            pass
+    except:
+        #Returns 409 if the space already exists.
+        return 409
+    
+    cur.execute("INSERT INTO space (space_id, space_name, parentspace_id) VALUES (?, ?, ?)",(new_space_id, spaceName, parentSpaceId))
+        
+    return 200
+
+
 def get_space(space_identifier):
     cur = connectToDB()
     cur.execute("SELECT space_name FROM space WHERE space_id = ?", (space_identifier,))
