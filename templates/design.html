@@ -82,18 +82,7 @@
 
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
-<<<<<<< HEAD
-        <div class="innerItems">
-        <div class="basic-grid"> <!-- Populate this with the items --!>
-            {% if itemss.items() == NULL %}
-                <h5>No Items</h5>
-            {% endif %}
-            {% for key, value in itemss.items() %}
-                <div class="item-card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
-            {% endfor %}
-        </div>
-        </div>
-=======
+
     <section class="basic-grid"> <!-- Populate this with the items -->
         {% for key, value in items.items() %}
             <div class="card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
@@ -111,7 +100,6 @@
           <button type="submit" class="btn">Save</button>
           <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
->>>>>>> eebe7684ded13f99845d40bf6224dc054424658c
     </div>
 
     <div class="form-popup" id="deleteForm">

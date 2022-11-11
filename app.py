@@ -39,7 +39,7 @@ def log_in():
         if user_object != None:
             login_user(user_object)
             space = get_space(user_object.rootSpace)
-            return render_template('design.html', subspaces = space.spaces, itemss = space.items, space_name = space.name)
+            return render_template('design.html', subspaces = space.spaces, items = space.items, space_name = space.name)
         else:
             flash('Invalid Credentials please try again.') #this and the line above need to be tested one might work hopefully
             return render_template("login.html")
@@ -60,10 +60,10 @@ def create_account():
         #add the new user to the database
         if action == 409:
             flash('Username already exists')
-            return redirect(url_for('register.html'))
+            return render_template('register.html')
         elif action == 410:
             flash('Email address already exists')
-            return redirect(url_for("register.html"))
+            return render_template("register.html")
         else:
             flash('Thank you for creating your account '+username)
             return render_template("login.html")
