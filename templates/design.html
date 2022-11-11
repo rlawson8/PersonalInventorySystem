@@ -82,7 +82,7 @@
     <section class="basic-grid">
         {% for key, value in subspaces.items() %}
             <div class="card">
-                <a href="http://127.0.0.1:5000/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p><br>{{ key }}</p></a>
+                <a href="/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p><br>{{ key }}</p></a>
             </div>
         {% endfor %}
     </section>
@@ -97,7 +97,7 @@
             <h5>No Items</h5>
         {% endif %}
         {% for key, value in items.items() %}
-            <div class="card"><a href="http://127.0.0.1:5000/details?item_id={{ key }}">{{ value }}</a></div>
+            <div class="card"><a href="/details?item_id={{ key }}">{{ value }}</a></div>
         {% endfor %}
     </section>
 </div>
