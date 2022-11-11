@@ -114,6 +114,8 @@ Customize login required to not throw internal server error. --Trevor
 
 Finish loading page tasks. 
 
+For nav bar if you click on user icon it has drop down that has options for logout if the current_user.is_authenticated == True or login/registration if current_user.is_authenticated == False
+
 Hydrate
 """
 

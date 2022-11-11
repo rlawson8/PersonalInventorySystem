@@ -127,7 +127,7 @@ def load_item(name, group, description, quantity, consumable, image):
         if spaceId == None:
             raise Exception('e')
         else:
-            continue
+            pass
 
     except:
         #Returns 409 if the space doesn't exist.
