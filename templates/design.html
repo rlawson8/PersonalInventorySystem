@@ -75,7 +75,7 @@
     {% endif %}
     {% endwith %}
 </div>
-<h1>{{ current_user.get_id() }}</h1>
+<!-- <h1>{{ current_user.get_id() }}</h1> -->
 
 <div class="container-fluid">
     <h4>Spaces</h4>
@@ -93,7 +93,7 @@
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
     <section class="basic-grid"> <!-- Populate this with the items -->
-        {% if itemss.items() == NULL %}
+        {% if items.items() == NULL %}
             <h5>No Items</h5>
         {% endif %}
         {% for key, value in items.items() %}

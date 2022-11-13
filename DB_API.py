@@ -342,14 +342,13 @@ def get_user(userID):
 def load_user_helper(user_id):
     cur = connectToDB()
     cur.execute("SELECT root_space_id FROM person WHERE user_id =?", (user_id,))
-    for x in cur:
-        rootSpace = x
+    try:
+        for x in cur:
+            rootSpace = x
 
-    rootSpace = rootSpace[0]
-    returnObject = user(user_id, rootSpace)
-    return returnObject
+        rootSpace = rootSpace[0]
+        returnObject = user(user_id, rootSpace)
+        return returnObject
+    except:
+        return None
 
-
-#code = user_login('testsubject1', 'abc123')
-code = load_user_helper('testsubject1')
-print(code)

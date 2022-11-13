@@ -1,5 +1,6 @@
 """Application entry point."""
-from flask import Flask, render_template, request, url_for, flash
+import flask_login
+from flask import Flask, render_template, request, url_for, flash, session
 from forms import registration, login
 from DB_API import *
 from flask_login import LoginManager, login_required, current_user, login_user
@@ -39,7 +40,7 @@ def log_in():
         if user_object != None:
             login_user(user_object)
             space = get_space(user_object.rootSpace)
-            return render_template('design.html', subspaces = space.spaces, itemss = space.items, space_name = space.name)
+            return render_template('design.html', subspaces = space.spaces, items = space.items, space_name = space.name)
         else:
             flash('Invalid Credentials please try again.') #this and the line above need to be tested one might work hopefully
             return render_template("login.html")
@@ -72,6 +73,12 @@ def create_account():
 @app.route('/design', methods=['GET','POST'])
 @login_required
 def space_design():
+    #experimentation
+    if '_user_id' in session.keys():
+        user = load_user(session['_user_id'])
+        space = get_space(user.rootSpace)
+
+    #end
     if request.method == 'POST':
         spaceName = request.form['spaceName']
         parentSpaceName = request.form['parentSpaceName']
@@ -80,7 +87,7 @@ def space_design():
         if action == 409:
             flash('Space name already exists')
             return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
-        else if action == 410:
+        elif action == 410:
             flash('Parent space does not exist')
             return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
         else:
@@ -99,7 +106,6 @@ def space_design():
                   "Lip Balm" : "9985"}
     spaceName = "Bobert's Space"
     """
-    space = get_space(1)
 
     return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
 
@@ -116,11 +122,13 @@ def loading_page():
 def query_page():
     return "This is the query page."
 
-@auth.route('/logout')
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return render_template("HomePage.html")
+
+
 
 """Things to do.
 Add back end for design page. -- Trevor
