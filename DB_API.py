@@ -17,15 +17,15 @@ pepper = "Mizzou2022!_IMT"
 def connectToDB():
     try:
         db = mariadb.connect(
-            user="trevor",
-            password="Graduation",
+            #user="trevor",
+            #password="Graduation",
             host="127.0.0.1",
-            port=3306,
-            database="Tabs_DB"
+            port=3307,
+            #database="Tabs_DB"
 
-            #user="root",
-            #password="root",
-            #database="pis_db"
+            user="root",
+            password="root",
+            database="pis_db"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -43,10 +43,11 @@ def connectToDB():
 
 
 class Space_Object:
-    def __init__(self, name, subspaces, items):
+    def __init__(self, name, subspaces, items, id):
         self.name = name
         self.spaces = subspaces
         self.items = items
+        self.id = id
 
 
 #Checks if a username is taken. If it is the function exits with code 409. If not it checks if email is taken. If it is
@@ -227,10 +228,11 @@ def user_login(username, password):
 def addSpace(spaceName, parentSpaceName):
     cur = connectToDB()
     new_space_id = max_space_id(cur)
-
+    print(parentSpaceName)
     try:
-        cur.execute("SELECT space_id FROM space WHERE space_name =?",(parentSpaceName))
+        cur.execute("SELECT space_id FROM space WHERE space_id =?",(parentSpaceName,))
         parentSpaceId = cur.fetchone()
+        parentSpaceId = parentSpaceId[0]
         if parentSpaceId == None:
             raise Exception('e')
         else:
@@ -239,7 +241,7 @@ def addSpace(spaceName, parentSpaceName):
         #Returns 409 if the parent space doesn't exist.
         return 410
 
-    try:
+    """try:
         cur.execute("SELECT space_id FROM space WHERE space_name =?",(spaceName))
         spaceId = cur.fetchone()
         if parentSpaceId != None:
@@ -248,7 +250,7 @@ def addSpace(spaceName, parentSpaceName):
             pass
     except:
         #Returns 409 if the space already exists.
-        return 409
+        return 409"""
     
     cur.execute("INSERT INTO space (space_id, space_name, parentspace_id) VALUES (?, ?, ?)",(new_space_id, spaceName, parentSpaceId))
         
@@ -317,7 +319,7 @@ def get_space(space_identifier):
     print(subspaces)
 
     #For later reference dictionary items are items, var name is name, subspaces are subspaces.
-    returnObject = Space_Object(name, subspaces, items)
+    returnObject = Space_Object(name, subspaces, items, space_identifier)
 
     return returnObject
 
@@ -352,3 +354,15 @@ def load_user_helper(user_id):
     except:
         return None
 
+def deleteSpace(space_id):
+    try:
+        cur = connectToDB()
+        cur.execute("DELETE FROM space WHERE space_id = ?", (space_id,))
+    except:
+        pass
+def deleteItem(item_id):
+    try:
+        cur = connectToDB()
+        cur.execute("DELETE FROM item WHERE item_id = ?" (item_id,))
+    except:
+        pass

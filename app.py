@@ -40,7 +40,7 @@ def log_in():
         if user_object != None:
             login_user(user_object)
             space = get_space(user_object.rootSpace)
-            return render_template('design.html', subspaces = space.spaces, items = space.items, space_name = space.name)
+            return render_template('design.html', subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
         else:
             flash('Invalid Credentials please try again.') #this and the line above need to be tested one might work hopefully
             return render_template("login.html")
@@ -80,18 +80,38 @@ def space_design():
 
     #end
     if request.method == 'POST':
-        spaceName = request.form['spaceName']
-        parentSpaceName = request.form['parentSpaceName']
-        action = addSpace(spaceName, parentSpaceName)
+        form = request.form['formSelector']
 
-        if action == 409:
-            flash('Space name already exists')
-            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
-        elif action == 410:
-            flash('Parent space does not exist')
-            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+        if form == 'AddSpaceForm':
+            spaceName = request.form['spaceName']
+            parentSpaceName = request.form['parentSpaceName']
+
+            action = addSpace(spaceName, parentSpaceName)
+            user = load_user(session['_user_id'])
+            space = get_space(user.rootSpace)
+            if action == 409:
+                flash('Space name already exists')
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+            elif action == 410:
+                flash('Parent space does not exist')
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+            else:
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+        elif form == 'DeleteForm':
+            itemChoice = int(request.form['choice1'])
+            subspaceChoice = int(request.form['choice2'])
+            print(itemChoice)
+            print(subspaceChoice)
+
+            deleteSpace(subspaceChoice)
+            deleteItem(itemChoice)
+
+            user = load_user(session['_user_id'])
+            space = get_space(user.rootSpace)
+
+            return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id)
         else:
-            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+            pass
 
 
 
@@ -107,7 +127,7 @@ def space_design():
     spaceName = "Bobert's Space"
     """
 
-    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
 
 @app.route('/details')
 def detail_page():

@@ -105,14 +105,16 @@
     <div class="form-popup" id="myForm">
         <form action="/design" method="post" class="form-container">
           <h1>Add Space</h1>
-
+          <!--
           <label for="parentSpaceName"><b>Parent Space Name (Put N/A if you are in the default space)</b></label>
-          <input type="text" placeholder="Enter Parent Space Name" name="parentSpaceName" required>
+          <input type="text" placeholder="Enter Parent Space Name" name="parentSpaceName" required> -->
+          <input type="hidden" value="{{ space_id }}" name="parentSpaceName">
+          <input type="hidden" value="AddSpaceForm" name="formSelector">
 
           <label for="spaceName"><b>Space Name</b></label>
-          <input type="text" placeholder="Enter Space Name" name="spaceName" required>
+          <input type="text" placeholder="Enter Space Name" name="spaceName">
       
-          <button type="submit" class="btn">Save</button>
+          <button type="submit" class="btn" name="btn" value="addSpaceBtn">Save</button>
           <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
@@ -120,15 +122,26 @@
     <div class="form-popup" id="deleteForm">
         <form action="/design" method="post" class="form-container">
             <h1>Delete Item/Space</h1>
-            <label for="choice"><b>Selecte One</b></label>
-            <select name="choice">
+            <label for="choice1"><b>To delete an item choose one from the list and hit save.</b></label>
+            <!-- <select name="choice">
                 <option value="item">Item</option>
                 <option value="space">Space</option>
+            </select> -->
+            <select name="choice1">
+                {% for key, value in items.items() %}
+                <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+            <label for="choice2"><b>To delete a subspace choose one from the list below and hit save.</b></label>
+            <select name="choice2">
+                {% for key, value in subspaces.items() %}
+                <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
             </select>
             
-            <label for="spaceName"><b>Space/Item Name</b></label>
-            <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required>
-        
+            <!-- <label for="spaceName"><b>Space/Item Name</b></label> -->
+            <!-- <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required> -->
+            <input type="hidden" value="DeleteForm" name="formSelector">
             <button type="submit" class="btn">Save</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
