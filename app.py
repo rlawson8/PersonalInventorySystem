@@ -73,12 +73,24 @@ def create_account():
 @app.route('/design', methods=['GET','POST'])
 @login_required
 def space_design():
-    #experimentation
+
+    try:
+        urlRequest = request.url
+        urlRequest = urlRequest.split('?')
+        urlRequest = urlRequest[1]
+        urlRequest = urlRequest.split('=')
+        space_id = urlRequest[1]
+        print(space_id)
+        space = get_space(space_id)
+        return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+        print(urlRequest)
+    except:
+        pass
+
     if '_user_id' in session.keys():
         user = load_user(session['_user_id'])
         space = get_space(user.rootSpace)
 
-    #end
     if request.method == 'POST':
         form = request.form['formSelector']
 
@@ -87,8 +99,7 @@ def space_design():
             parentSpaceName = request.form['parentSpaceName']
 
             action = addSpace(spaceName, parentSpaceName)
-            user = load_user(session['_user_id'])
-            space = get_space(user.rootSpace)
+            space = get_space(parentSpaceName)
             if action == 409:
                 flash('Space name already exists')
                 return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
