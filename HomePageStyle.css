@@ -32,7 +32,7 @@ h3 {
  
 }
 .col-md-3 {
-    margin-top: 208px;
+    margin-top: 108px;
 }
 .login {
     width: 238px;
@@ -63,6 +63,10 @@ h3 {
     display: block;
     max-width: 100%;
     height: auto;
+}
+.vLine {
+    border-left: 4px solid #004E89;
+    padding-left: 10px;
 }
 
 @media (max-width: 600px) {
