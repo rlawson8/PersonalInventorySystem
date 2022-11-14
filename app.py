@@ -80,9 +80,10 @@ def space_design():
         urlRequest = urlRequest[1]
         urlRequest = urlRequest.split('=')
         space_id = urlRequest[1]
+
         print(space_id)
         space = get_space(space_id)
-        return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+        return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
         print(urlRequest)
     except:
         pass

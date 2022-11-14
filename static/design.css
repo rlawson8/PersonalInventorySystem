@@ -201,3 +201,7 @@ button:hover {
   .form-container .btn:hover, .open-button:hover {
     opacity: 1;
   }
+
+  .back_button {
+
+  }

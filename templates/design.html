@@ -66,6 +66,10 @@
 </nav>
 
 <div class="container" id="mainFormDiv"> <!-- Populate this with the subspaces and spaces -->
+    {% if parent_space %}
+        <!-- Add the back button image to static/images/ and link the link to it. -->
+        <a href="/design?space_id={{ parent_space }}" class = 'back_button'>Back</a>
+    {% endif %}
     <h2 name="headerTag">{{ space_name }}</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}

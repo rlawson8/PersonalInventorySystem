@@ -43,11 +43,12 @@ def connectToDB():
 
 
 class Space_Object:
-    def __init__(self, name, subspaces, items, id):
+    def __init__(self, name, subspaces, items, id, parent_space):
         self.name = name
         self.spaces = subspaces
         self.items = items
         self.id = id
+        self.parent_space = parent_space
 
 
 #Checks if a username is taken. If it is the function exits with code 409. If not it checks if email is taken. If it is
@@ -258,14 +259,18 @@ def addSpace(spaceName, parentSpaceName):
 
 
 def get_space(space_identifier):
+    print("It's hitting the function.")
     cur = connectToDB()
-    cur.execute("SELECT space_name FROM space WHERE space_id = ?", (space_identifier,))
-    counter = 0
-    while counter < 1:
-        for x in cur:
-            name = x
-            counter += 1
+    cur.execute("SELECT space_name, parentspace_id FROM space WHERE space_id = ?", (space_identifier,))
+
+    print("It's getting to the while loop.")
+    for x in cur:
+        name = x
+
+    print(name)
+    parent_space = name[1]
     name = name[0]
+    print(parent_space)
     print(name)
 
     items = {}
@@ -319,7 +324,11 @@ def get_space(space_identifier):
     print(subspaces)
 
     #For later reference dictionary items are items, var name is name, subspaces are subspaces.
-    returnObject = Space_Object(name, subspaces, items, space_identifier)
+    if parent_space == None:
+        parent_space = 0
+    else:
+        parent_space = int(parent_space)
+    returnObject = Space_Object(name, subspaces, items, space_identifier, parent_space)
 
     return returnObject
 
@@ -356,13 +365,21 @@ def load_user_helper(user_id):
 
 def deleteSpace(space_id):
     try:
-        cur = connectToDB()
-        cur.execute("DELETE FROM space WHERE space_id = ?", (space_id,))
+        pass
+        #cur = connectToDB()
+        #cur.execute("DELETE FROM space WHERE space_id = ?", (space_id,))
     except:
         pass
 def deleteItem(item_id):
     try:
-        cur = connectToDB()
-        cur.execute("DELETE FROM item WHERE item_id = ?" (item_id,))
+        pass
+        #cur = connectToDB()
+        #cur.execute("DELETE FROM item WHERE item_id = ?" (item_id,))
     except:
         pass
+
+
+
+#Testing
+pace = get_space(13)
+print(pace)
