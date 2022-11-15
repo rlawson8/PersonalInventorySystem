@@ -203,5 +203,10 @@ button:hover {
   }
 
   .back_button {
-
+    width: 80px;
+    height: 25px;
+    background: #383F51;
+    border-radius: 20px;
+    font-size: 16px;
+    color: white;
   }
