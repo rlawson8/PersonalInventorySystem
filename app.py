@@ -1,5 +1,6 @@
 """Application entry point."""
-from flask import Flask, render_template, request, url_for, flash
+import flask_login
+from flask import Flask, render_template, request, url_for, flash, session
 from forms import registration, login
 from DB_API import *
 from flask_login import LoginManager, login_required, current_user, login_user
@@ -39,7 +40,7 @@ def log_in():
         if user_object != None:
             login_user(user_object)
             space = get_space(user_object.rootSpace)
-            return render_template('design.html', subspaces = space.spaces, itemss = space.items, space_name = space.name)
+            return render_template('design.html', subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
         else:
             flash('Invalid Credentials please try again.') #this and the line above need to be tested one might work hopefully
             return render_template("login.html")
@@ -72,19 +73,57 @@ def create_account():
 @app.route('/design', methods=['GET','POST'])
 @login_required
 def space_design():
-    if request.method == 'POST':
-        spaceName = request.form['spaceName']
-        parentSpaceName = request.form['parentSpaceName']
-        action = addSpace(spaceName, parentSpaceName)
 
-        if action == 409:
-            flash('Space name already exists')
-            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
-        else if action == 410:
-            flash('Parent space does not exist')
-            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+    try:
+        urlRequest = request.url
+        urlRequest = urlRequest.split('?')
+        urlRequest = urlRequest[1]
+        urlRequest = urlRequest.split('=')
+        space_id = urlRequest[1]
+
+        print(space_id)
+        space = get_space(space_id)
+        return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
+        print(urlRequest)
+    except:
+        pass
+
+    if '_user_id' in session.keys():
+        user = load_user(session['_user_id'])
+        space = get_space(user.rootSpace)
+
+    if request.method == 'POST':
+        form = request.form['formSelector']
+
+        if form == 'AddSpaceForm':
+            spaceName = request.form['spaceName']
+            parentSpaceName = request.form['parentSpaceName']
+
+            action = addSpace(spaceName, parentSpaceName)
+            space = get_space(parentSpaceName)
+            if action == 409:
+                flash('Space name already exists')
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+            elif action == 410:
+                flash('Parent space does not exist')
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+            else:
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+        elif form == 'DeleteForm':
+            itemChoice = int(request.form['choice1'])
+            subspaceChoice = int(request.form['choice2'])
+            print(itemChoice)
+            print(subspaceChoice)
+
+            deleteSpace(subspaceChoice)
+            deleteItem(itemChoice)
+
+            user = load_user(session['_user_id'])
+            space = get_space(user.rootSpace)
+
+            return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id)
         else:
-            return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+            pass
 
 
 
@@ -99,9 +138,8 @@ def space_design():
                   "Lip Balm" : "9985"}
     spaceName = "Bobert's Space"
     """
-    space = get_space(1)
 
-    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name)
+    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
 
 @app.route('/details')
 def detail_page():
@@ -116,11 +154,13 @@ def loading_page():
 def query_page():
     return "This is the query page."
 
-@auth.route('/logout')
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return render_template("HomePage.html")
+
+
 
 """Things to do.
 Add back end for design page. -- Trevor

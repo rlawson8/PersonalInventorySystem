@@ -43,10 +43,12 @@ def connectToDB():
 
 
 class Space_Object:
-    def __init__(self, name, subspaces, items):
+    def __init__(self, name, subspaces, items, id, parent_space):
         self.name = name
         self.spaces = subspaces
         self.items = items
+        self.id = id
+        self.parent_space = parent_space
 
 
 #Checks if a username is taken. If it is the function exits with code 409. If not it checks if email is taken. If it is
@@ -227,10 +229,11 @@ def user_login(username, password):
 def addSpace(spaceName, parentSpaceName):
     cur = connectToDB()
     new_space_id = max_space_id(cur)
-
+    print(parentSpaceName)
     try:
-        cur.execute("SELECT space_id FROM space WHERE space_name =?",(parentSpaceName))
+        cur.execute("SELECT space_id FROM space WHERE space_id =?",(parentSpaceName,))
         parentSpaceId = cur.fetchone()
+        parentSpaceId = parentSpaceId[0]
         if parentSpaceId == None:
             raise Exception('e')
         else:
@@ -239,7 +242,7 @@ def addSpace(spaceName, parentSpaceName):
         #Returns 409 if the parent space doesn't exist.
         return 410
 
-    try:
+    """try:
         cur.execute("SELECT space_id FROM space WHERE space_name =?",(spaceName))
         spaceId = cur.fetchone()
         if parentSpaceId != None:
@@ -248,7 +251,7 @@ def addSpace(spaceName, parentSpaceName):
             pass
     except:
         #Returns 409 if the space already exists.
-        return 409
+        return 409"""
     
     cur.execute("INSERT INTO space (space_id, space_name, parentspace_id) VALUES (?, ?, ?)",(new_space_id, spaceName, parentSpaceId))
         
@@ -256,14 +259,18 @@ def addSpace(spaceName, parentSpaceName):
 
 
 def get_space(space_identifier):
+    print("It's hitting the function.")
     cur = connectToDB()
-    cur.execute("SELECT space_name FROM space WHERE space_id = ?", (space_identifier,))
-    counter = 0
-    while counter < 1:
-        for x in cur:
-            name = x
-            counter += 1
+    cur.execute("SELECT space_name, parentspace_id FROM space WHERE space_id = ?", (space_identifier,))
+
+    print("It's getting to the while loop.")
+    for x in cur:
+        name = x
+
+    print(name)
+    parent_space = name[1]
     name = name[0]
+    print(parent_space)
     print(name)
 
     items = {}
@@ -317,7 +324,11 @@ def get_space(space_identifier):
     print(subspaces)
 
     #For later reference dictionary items are items, var name is name, subspaces are subspaces.
-    returnObject = Space_Object(name, subspaces, items)
+    if parent_space == None:
+        parent_space = 0
+    else:
+        parent_space = int(parent_space)
+    returnObject = Space_Object(name, subspaces, items, space_identifier, parent_space)
 
     return returnObject
 
@@ -342,14 +353,33 @@ def get_user(userID):
 def load_user_helper(user_id):
     cur = connectToDB()
     cur.execute("SELECT root_space_id FROM person WHERE user_id =?", (user_id,))
-    for x in cur:
-        rootSpace = x
+    try:
+        for x in cur:
+            rootSpace = x
 
-    rootSpace = rootSpace[0]
-    returnObject = user(user_id, rootSpace)
-    return returnObject
+        rootSpace = rootSpace[0]
+        returnObject = user(user_id, rootSpace)
+        return returnObject
+    except:
+        return None
+
+def deleteSpace(space_id):
+    try:
+        pass
+        #cur = connectToDB()
+        #cur.execute("DELETE FROM space WHERE space_id = ?", (space_id,))
+    except:
+        pass
+def deleteItem(item_id):
+    try:
+        pass
+        #cur = connectToDB()
+        #cur.execute("DELETE FROM item WHERE item_id = ?" (item_id,))
+    except:
+        pass
 
 
-#code = user_login('testsubject1', 'abc123')
-code = load_user_helper('testsubject1')
-print(code)
+
+#Testing
+pace = get_space(13)
+print(pace)

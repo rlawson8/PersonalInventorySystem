@@ -66,6 +66,10 @@
 </nav>
 
 <div class="container" id="mainFormDiv"> <!-- Populate this with the subspaces and spaces -->
+    {% if parent_space %}
+        <!-- Add the back button image to static/images/ and link the link to it. -->
+        <a href="/design?space_id={{ parent_space }}" class = 'back_button'>Back</a>
+    {% endif %}
     <h2 name="headerTag">{{ space_name }}</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -75,7 +79,7 @@
     {% endif %}
     {% endwith %}
 </div>
-<h1>{{ current_user.get_id() }}</h1>
+<!-- <h1>{{ current_user.get_id() }}</h1> -->
 
 <div class="container-fluid">
     <h4>Spaces</h4>
@@ -93,7 +97,7 @@
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
     <section class="basic-grid"> <!-- Populate this with the items -->
-        {% if itemss.items() == NULL %}
+        {% if items.items() == NULL %}
             <h5>No Items</h5>
         {% endif %}
         {% for key, value in items.items() %}
@@ -105,14 +109,16 @@
     <div class="form-popup" id="myForm">
         <form action="/design" method="post" class="form-container">
           <h1>Add Space</h1>
-
+          <!--
           <label for="parentSpaceName"><b>Parent Space Name (Put N/A if you are in the default space)</b></label>
-          <input type="text" placeholder="Enter Parent Space Name" name="parentSpaceName" required>
+          <input type="text" placeholder="Enter Parent Space Name" name="parentSpaceName" required> -->
+          <input type="hidden" value="{{ space_id }}" name="parentSpaceName">
+          <input type="hidden" value="AddSpaceForm" name="formSelector">
 
           <label for="spaceName"><b>Space Name</b></label>
-          <input type="text" placeholder="Enter Space Name" name="spaceName" required>
+          <input type="text" placeholder="Enter Space Name" name="spaceName">
       
-          <button type="submit" class="btn">Save</button>
+          <button type="submit" class="btn" name="btn" value="addSpaceBtn">Save</button>
           <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
@@ -120,15 +126,26 @@
     <div class="form-popup" id="deleteForm">
         <form action="/design" method="post" class="form-container">
             <h1>Delete Item/Space</h1>
-            <label for="choice"><b>Selecte One</b></label>
-            <select name="choice">
+            <label for="choice1"><b>To delete an item choose one from the list and hit save.</b></label>
+            <!-- <select name="choice">
                 <option value="item">Item</option>
                 <option value="space">Space</option>
+            </select> -->
+            <select name="choice1">
+                {% for key, value in items.items() %}
+                <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+            <label for="choice2"><b>To delete a subspace choose one from the list below and hit save.</b></label>
+            <select name="choice2">
+                {% for key, value in subspaces.items() %}
+                <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
             </select>
             
-            <label for="spaceName"><b>Space/Item Name</b></label>
-            <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required>
-        
+            <!-- <label for="spaceName"><b>Space/Item Name</b></label> -->
+            <!-- <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required> -->
+            <input type="hidden" value="DeleteForm" name="formSelector">
             <button type="submit" class="btn">Save</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>

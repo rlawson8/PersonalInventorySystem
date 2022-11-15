@@ -77,7 +77,3 @@ code = login('trevorB', testPass)
 print(code)
 
 bdb = hash('abc123')"""
-bab = registration('rabod', 'a', 'abc123')
-
-###Notes for tomorrow. I am currently looking at how to properly use BCrypt. Since we're using salt it brings a different hash each
-###time. I need to figure out how to compare the hash of the current submitted password to that of the old hashed pass.
