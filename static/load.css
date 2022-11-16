@@ -1,0 +1,117 @@
+
+h2{
+    text-align: center;
+    font-size: 80px;
+    font-weight: bold;
+    color: #004E89;
+    padding-bottom: 40px;
+}
+
+form{
+    text-align: center;
+    width: fit-content;
+    margin:0 auto;
+}
+
+
+div#labelAlign{
+    width: 340px;
+    margin:0 auto;
+    
+}
+label{
+    float: left;
+    font-size: 20px;
+}
+div#rowDiv{
+    width: 383px;
+    height: 55px;
+    background: #DDDBF1;
+    border-radius: 20px;
+    margin:0 auto;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    
+}
+div#desLabelAlign{
+    width: 790px;
+    margin:0 auto;
+}
+input{
+    background: #DDDBF1;
+    border-width: 1px;
+}
+input#itemName{
+    width: 345px;
+    height: 37px;
+    
+}
+input#groupName{
+    width: 345px;
+    height: 37px;
+}
+input#quantity{
+    float: right;
+    width: 42px;
+    height: 33px;
+}
+input#consumable{
+    float: right;
+    height: 30px;
+    width: 30px;
+    margin: 0px;
+}
+label#descriptionLabel{
+    margin-top: 5px;
+}
+div#descriptionDiv{
+    width: 841px;
+    height: 337px;
+    background: #DDDBF1;
+    border-radius: 20px;
+    margin:0 auto;
+    
+}
+
+textarea{ 
+    width: 808px;
+    height: 269px;
+    resize: none;
+    background: #DDDBF1;
+}
+#insertPic{
+    display: inline-block;
+}
+div#imageLabel{
+    background: #DDDBF1;
+    width: 442px;
+    height: 442px;
+    border-radius: 50%;
+    margin:0 auto;
+    display: flex;
+    justify-content: center;
+    align-items:center
+}
+input[type=file]{
+    color: aqua;
+}
+input[type="file" i]{
+    color: yellow;
+}
+.btn {
+    width: 100px;
+    height: 55px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+div#buttonRow{
+    display: flex;
+    justify-content: center;
+}
