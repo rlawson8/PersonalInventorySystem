@@ -1,0 +1,102 @@
+.container-fluid {
+    margin-bottom: 0px;
+}
+p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    color: rgba(0, 78, 137, 0.8);
+}
+h3 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    color: #004E89;
+}
+.btn {
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    padding-top: 27px;
+    
+}
+.btn:hover {
+    
+    background-color: #DDDBF1;
+    border-color: #383F51;
+ 
+}
+.col-md-3 {
+    margin-top: 108px;
+}
+.login {
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 27px;
+}
+.create {
+    width: 238px;
+    height: 82px;
+    background: #383F51;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 27px;
+}
+.user {
+    width: 50px;
+    height: 50px;
+}
+.row {
+    margin-left: 110px;
+}
+.bg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+.vLine {
+    border-left: 4px solid #004E89;
+    padding-left: 10px;
+}
+
+@media (max-width: 600px) {
+    p {
+        display: none;
+        /* padding-right: 20px; */
+    }
+
+    h3 {
+        text-align: center;
+        /* padding-right: 106px; */
+        padding-bottom: 0px;
+        font-size: 20px;
+        line-height: 35px;
+    }
+
+    .login{
+        margin-top: 30px;
+    }
+
+    div {
+        text-align: center;
+        display: block;
+    }
+
+    .row{
+        margin-left: auto;
+    }
+
+    .col-md-3 {
+        margin-top: 30px;
+    }
+}
