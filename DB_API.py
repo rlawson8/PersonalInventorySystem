@@ -17,14 +17,14 @@ pepper = "Mizzou2022!_IMT"
 def connectToDB():
     try:
         db = mariadb.connect(
-            # user="trevor",
-            # password="Graduation",
+            user="trevor",
+            password="Graduation",
             host="127.0.0.1",
             port=3306,
             database="tabs_db",
 
-            user="root",
-            password="capstone"
+            # user="root",
+            # password="capstone"
             # database="pis_db"
         )
     except mariadb.Error as e:
