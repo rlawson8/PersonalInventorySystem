@@ -87,8 +87,8 @@ button:hover {
 .card {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
     background: #353535;
     font-size: 3rem;
     color: #fff;
@@ -98,6 +98,7 @@ button:hover {
     border-radius: 4px;
     transition: all 500ms;
     overflow: hidden;
+    /* overflow-x: scroll; */
 
     background-size: cover;
     background-position: center;
@@ -203,6 +204,7 @@ button:hover {
   }
 
   .back_button {
+    margin-top: 10px;
     width: 80px;
     height: 25px;
     background: #383F51;

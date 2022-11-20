@@ -17,15 +17,15 @@ pepper = "Mizzou2022!_IMT"
 def connectToDB():
     try:
         db = mariadb.connect(
-            user="trevor",
-            password="Graduation",
+            # user="trevor",
+            # password="Graduation",
             host="127.0.0.1",
             port=3306,
-            database="Tabs_DB"
+            database="tabs_db",
 
-            #user="root",
-            #password="root",
-            #database="pis_db"
+            user="root",
+            password="capstone"
+            # database="pis_db"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -363,18 +363,19 @@ def load_user_helper(user_id):
     except:
         return None
 
-def deleteSpace(space_id):
+def deleteSpace(space_name):
     try:
-        pass
-        #cur = connectToDB()
-        #cur.execute("DELETE FROM space WHERE space_id = ?", (space_id,))
+        # ADD CODE HERE TO HANDLE MULTI LEVELS OF DELETING SPACES CURRENTLY ONLY WORKS FOR TWO LEVELS
+        cur = connectToDB()
+        cur.execute("DELETE FROM space WHERE parentspace_id = ?", (space_name,))
+        cur.execute("DELETE FROM space WHERE space_id = ?", (space_name,))
     except:
         pass
-def deleteItem(item_id):
+def deleteItem(item_name):
     try:
-        pass
-        #cur = connectToDB()
-        #cur.execute("DELETE FROM item WHERE item_id = ?" (item_id,))
+        # pass
+        cur = connectToDB()
+        cur.execute("DELETE FROM item WHERE item_id = ?" (item_name,))
     except:
         pass
 

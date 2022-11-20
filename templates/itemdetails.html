@@ -6,8 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../static/load.css">
   <link rel="stylesheet" href="../static/navigation.css">
+  <link rel="stylesheet" href="../static/details.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../static/common.js"></script>
@@ -46,83 +46,61 @@
             </ul>
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
-      </nav>
+    </nav>
       
-      <div class="container">
-        <h2>Load Item</h2>
-        <form>
-            <div class="form-group row" id="loadItemsForm">
-                <div class="col-sm-6">
-                    <div id="labelAlign">
-                        <label for="itemName">Item*</label><br><br>
-                    </div>
-                    <div id="rowDiv">
-                        <input type="text"  id="itemName" name="itemName" required>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div id="labelAlign">
-                        <label for="groupName">Group*</label><br><br>
-                    </div>
-                    <div id="rowDiv">
-                        <input type="text"  id="groupName" name="GroupName" required><br>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <br>
-            <div class="form-group row">
-                <div class="col-sm-6" >
+      <div class="container mainc"> <!-- so essentially we need to make the navbar the same and changing the style of this changes the navbar style on this page once we do the jinja templates though that might go away or just change the class names or something-->
+        <!-- <a href="/design?space_id={{ parent_space }}" class = 'back_button'>Back</a> -->
+        <h2 name="headerTag">{{ item_name }}</h2>
+        <h3 name="subHeaderTag">{{ space_name }}</h2>
+            <div class="row">
+                <div class="col-md-6" >
                     <div id="rowDiv">
                         <div id="labelAlign">
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" name="quantity" min="1" max="100" required>
+                            <input type="number" id="quantity" name="quantity" min="1" max="100" value={{item_quantity}} readonly> <!-- not sure if the value is right-->
                         </div>
                     </div>
                     <br>
                     <br>
                 </div>
-                <div class="col-sm-6" >
+                <div class="col-md-6" >
                     <div id="rowDiv">
                         <div id="labelAlign">
-                            <label for="consumable">Consumable</label>
-                            <input type="checkbox" id="consumable" name="consumable" value="yes">
+                            <label for="consumable">Consumable</label> <!-- what is the item_consumable going to be it might not be 0-->
+                            {% if item_consumable == 0 %}
+                            <input type="checkbox" id="consumable" name="consumable" value="yes" onclick="return false;" checked="true">
+                            {% else %}  
+                            <input type="checkbox" id="consumable" name="consumable" value="yes" onclick="return false;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <div class="row">
+                <div id="descriptionDiv" class="col-md-6">
+                    <div id="desLabelAlign">
+                        <label for="description" id="descriptionLabel">Description</label>
+                    </div>
+                    <div id="textBox">
+                        <textarea name="description" readonly>
+                            {{ item_description }}
+                        </textarea><br>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="image">
+                        <div id="imageLabel">
+                            {% if item_image == "" %}
+                            <label for="insertPic">Image</label><br>
+                            {% else %}
+                            <img src="../static/images/itemimages/{{item_image}}" alt="No Image">
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-            <br>
-            <div id="descriptionDiv">
-                <div id="desLabelAlign">
-                    <label for="description" id="descriptionLabel">Description</label>
-                </div>
-                <div id="textBox">
-                    <textarea name="description">
-
-                    </textarea><br>
-                </div>
-            </div>
-            <br>
-            <div id="image">
-                <div id="imageLabel">
-                    <label for="insertPic">Image</label><br>
-                </div>
-                <br>
-                <input type="file" id="insertPic" name="insertPic" accept="image/*" >
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
-                    <div id="buttonRow">
-                        <button type="submit" class="btn btn-default" value="Submit" id="sButton">Save</button>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div id="buttonRow">
-                        <button type="reset" class="btn btn-default" value="Reset" id="cButton">Clear</button>
-                    </div>
-                </div>
-            </div>
-        </form>
       </div>
       
 </body>

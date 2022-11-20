@@ -53,10 +53,10 @@
             <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
               {% if current_user.is_authenticated %}
+                <a class="dropdown-item" href="/logout">Logout</a>
+              {% else %}
                 <a class="dropdown-item" href="/login">Login</a><br>
                 <a class="dropdown-item" href="/createAccount">Register</a><br>
-              {% else %}
-                <a class="dropdown-item" href="/logout">Logout</a>
               {% endif %}
             </div>
         </li>
@@ -86,7 +86,7 @@
     <section class="basic-grid">
         {% for key, value in subspaces.items() %}
             <div class="card">
-                <a href="/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p><br>{{ key }}</p></a>
+                <a href="/design?space_id={{ value }}"><img src="../static/images/roomicon.png" class="card-image" alt="Room"><p style="padding-left:10px; overflow-x: scroll;"><br>{{ key }}</p></a>
             </div>
         {% endfor %}
     </section>
@@ -118,7 +118,7 @@
           <label for="spaceName"><b>Space Name</b></label>
           <input type="text" placeholder="Enter Space Name" name="spaceName">
       
-          <button type="submit" class="btn" name="btn" value="addSpaceBtn">Save</button>
+          <button type="submit" class="btn" name="addspace" value="addSpaceBtn">Save</button>
           <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
@@ -126,18 +126,22 @@
     <div class="form-popup" id="deleteForm">
         <form action="/design" method="post" class="form-container">
             <h1>Delete Item/Space</h1>
+            <!-- <input type="hidden" value="{{ space_id }}" name="parentSpaceName"> -->
+
             <label for="choice1"><b>To delete an item choose one from the list and hit save.</b></label>
             <!-- <select name="choice">
                 <option value="item">Item</option>
                 <option value="space">Space</option>
             </select> -->
             <select name="choice1">
+                <option value="none">N/A</option>
                 {% for key, value in items.items() %}
                 <option value="{{ value }}">{{ key }}</option>
                 {% endfor %}
             </select>
             <label for="choice2"><b>To delete a subspace choose one from the list below and hit save.</b></label>
             <select name="choice2">
+                <option value="none">N/A</option>
                 {% for key, value in subspaces.items() %}
                 <option value="{{ value }}">{{ key }}</option>
                 {% endfor %}
@@ -146,7 +150,7 @@
             <!-- <label for="spaceName"><b>Space/Item Name</b></label> -->
             <!-- <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required> -->
             <input type="hidden" value="DeleteForm" name="formSelector">
-            <button type="submit" class="btn">Save</button>
+            <button type="submit" name="deleteform" class="btn">Save</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
