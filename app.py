@@ -3,7 +3,7 @@ import flask_login
 from flask import Flask, render_template, request, url_for, flash, session
 from forms import registration, login
 from DB_API import *
-from flask_login import LoginManager, login_required, current_user, login_user
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 
 app = Flask(__name__)
 
@@ -95,7 +95,7 @@ def space_design():
     if request.method == 'POST':
         form = request.form['formSelector']
 
-        if form == 'AddSpaceForm':
+        if 'addspace' in request.form:
             spaceName = request.form['spaceName']
             parentSpaceName = request.form['parentSpaceName']
 
@@ -109,9 +109,11 @@ def space_design():
                 return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
             else:
                 return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
-        elif form == 'DeleteForm':
-            itemChoice = int(request.form['choice1'])
-            subspaceChoice = int(request.form['choice2'])
+        elif 'deleteform' in request.form:
+            # parentSpaceName = request.form['parentSpaceName']
+            # space = get_space(parentSpaceName)
+            itemChoice = request.form['choice1']
+            subspaceChoice = request.form['choice2']
             print(itemChoice)
             print(subspaceChoice)
 
@@ -142,15 +144,17 @@ def space_design():
     return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
 
 @app.route('/details')
+@login_required
 def detail_page():
-    return "This is the item details page."
+    return render_template("itemdetails.html")
 
 @app.route('/load')
+@login_required
 def loading_page():
-
-    return "This is the loading page."
+    return render_template("loaditems.html")
 
 @app.route('/find')
+@login_required
 def query_page():
     return "This is the query page."
 
@@ -159,6 +163,11 @@ def query_page():
 def logout():
     logout_user()
     return render_template("HomePage.html")
+
+@app.errorhandler(500)
+def pageNotFound(error):
+    flash('Please login or create an account first')
+    return render_template("login.html")
 
 
 
