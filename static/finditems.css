@@ -1,0 +1,15 @@
+#search_box{
+    padding:3px;
+    border: none;
+    height: 90%;
+    width:75%;
+}
+
+.search_button{
+    border: none;
+    background: #383F51;
+    color: white;
+    height:100%;
+    width: 25%;
+
+}

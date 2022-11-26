@@ -1,6 +1,8 @@
 #Using the BCrypt Algorith to hash and salt the password
 import bcrypt
-from DB_API import newUser, user_login, get_user
+from DB_API import newUser, user_login, get_user, user
+import boto3
+import os
 
 
 #Adding pepper
@@ -59,21 +61,41 @@ def login(username, password):
     else:
         return action
 
+def connectToS3():
+    s3 = boto3.resource(
+        service_name='s3',
+        region_name='us-east-2',
+        aws_access_key_id='AKIA2XTPVX4V6IHG55MK',
+        aws_secret_access_key='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'
+    )
+    for bucket in s3.buckets.all():
+        print(bucket.name)
+
+    return s3
+def uploadPhoto(filename,item_id, user_id):
+    filename = "./static/images/tmp/" + filename
+    item_id = str(item_id)
+    user_id = str(user_id)
+    key = user_id + '*' + item_id
+    s3 = connectToS3()
+    s3.Bucket("tabsbucket").upload_file(Filename=filename, Key=key)
+    if os.path.exists(filename):
+        os.remove(filename)
+    else:
+        print("File doesn't exist.")
+    return 200
+
+def getPhoto(user_id, item_id):
+    item_id = str(item_id)
+    user_id = str(user_id)
+    key = user_id + '*' + item_id
+    location = "./static/images/tmp/" + key + ".jpg"
+    s3 = connectToS3()
+    #photo = s3.Bucket("tabsbucket").Object(key).get()
+    s3.Bucket("tabsbucket").download_file(key, location)
+    return 200
 
 ###Test Area###
-"""
-result = user_load('ilnam')
-print(result)
-
-result = hash('asdfg')
-print(result)
-testPass = 'asdfg' + _pepper
-if bcrypt.checkpw(testPass.encode('utf-8'), result):
-    print('match')
-else:
-    print('no dice')
-
-code = login('trevorB', testPass)
+code = getPhoto("test_subject1", 17)
+#code = uploadPhoto("cat.jpeg", 17, "test_subject1")
 print(code)
-
-bdb = hash('abc123')"""

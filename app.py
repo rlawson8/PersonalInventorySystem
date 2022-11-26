@@ -1,9 +1,12 @@
 """Application entry point."""
 import flask_login
 from flask import Flask, render_template, request, url_for, flash, session
-from forms import registration, login
+from forms import registration, login, uploadPhoto
 from DB_API import *
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
+import os
+import werkzeug
+import json
 
 app = Flask(__name__)
 
@@ -14,6 +17,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 app.config['SECRET_KEY'] = '_5#y2LF4Q8z*n*xec]/'
+app.config['UPLOAD_FOLDER'] = './static/images/tmp/'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -99,7 +103,7 @@ def space_design():
             spaceName = request.form['spaceName']
             parentSpaceName = request.form['parentSpaceName']
 
-            action = addSpace(spaceName, parentSpaceName)
+            action = addSpace(spaceName, parentSpaceName, user.userID)
             space = get_space(parentSpaceName)
             if action == 409:
                 flash('Space name already exists')
@@ -130,7 +134,7 @@ def space_design():
             itemName = request.form['itemName']
             parentSpaceID = request.form['parentSpaceID']
 
-            action = quickAddItem(itemName, parentSpaceID)
+            action = quickAddItem(itemName, parentSpaceID, user.userID)
             space = get_space(parentSpaceID)
             print(action)
             if action == 410:
@@ -164,10 +168,70 @@ def space_design():
 def detail_page():
     return render_template("itemdetails.html")
 
-@app.route('/load')
+@app.route('/load', methods=['GET','POST'])
 @login_required
 def loading_page():
-    return render_template("loaditems.html")
+    if request.method == "POST":
+        name = request.form['itemName']
+        space = request.form['groupName']
+        quantity = request.form['quantity']
+        if 'consumable' in request.form:
+            consumable = request.form['consumable']
+        else:
+            consumable = 0
+        if 'description' in request.form:
+            description = request.form['description']
+        if 'file' in request.files:
+            print("It sees a pic")
+            picture = request.files['file']
+            #Maybe
+            #picture - request.files['file']
+            picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture.filename))
+            filename = picture.filename
+            code = addItem(name, description, quantity, consumable, space, current_user.userID, filename)
+            if code == 409:
+                flash("Space name does not exist")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+            elif code == 200:
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+            else:
+                code == uploadPhoto(filename, code, current_user.userID)
+                flash("Success!")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+        else:
+            code = addItem(name, description, quantity, consumable, space, current_user.userID, None)
+            if code == 409:
+                flash("Space name does not exist")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+            else:
+                flash("Success!")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+    else:
+
+
+    #Get data for drop down.
+        cu = current_user.userID
+        spaces = get_all_spaces(cu)
+        return render_template("loaditems.html", spaces = spaces)
+
+"""
+@app.route('/itemSearch', methods=["POST", "GET"])
+def findResults():
+    if request.method == "POST" :
+        search_word = request.form['search_word']
+        print(search_word)
+    return json.jsonify({'data': render_template(response.html, search_word=search_word)})
+"""
 
 @app.route('/find')
 @login_required

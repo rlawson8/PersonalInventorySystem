@@ -1,8 +1,51 @@
 {% extends "navigation.html" %}
 {% block title %}Find Items{% endblock %}
-{% block customCSS %}{% endblock %}
-{% block customJS %}{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="../static/finditems.css">
+{% endblock %}
+
+{% block customJS %}
+<script type="text/javascript">
+    $(function() {
+        $(".search_button").click(function() {
+            var search_word = $("search_box").val();
+            var dataString = $("search_word=") + search_word
+            if(search_word==''){
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "/itemSearch",
+                    data: dataString,
+                    cache: false,
+                    beforeSend: function (html){
+                        document.getElementById("insert_search").innerHTML = '';
+                        $("#flash").show();
+                        $("#searchword").show();
+                        $(".searchword").html(search_word);
+                    },
+                    success: function (html){
+                        $("#insert_search").show();
+                        $("#insert_search").append(html.data);
+                        $("#flash").hide();
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}
 
 {% block content %}
 <h1>Find Items</h1>
+
+    <form method = "get" action = "">
+        <input type="text" name="search" id="search_box" class="search_box">
+        <input type="submit" value="Search" class="search_button">
+    </form>
+
+    <div id="searchword">Search results for <span class="searchword"></span></div>
+    <div id="flash"></div>
+    <ol id="insert_search" class="update"></ol>
+
 {% endblock %}

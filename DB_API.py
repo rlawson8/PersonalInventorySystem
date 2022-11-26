@@ -23,7 +23,7 @@ def connectToDB():
             port=3306,
             database="Tabs_DB",
 
-        
+
             #user="root",
             #password="root"
         )
@@ -226,7 +226,7 @@ def user_login(username, password):
 
 
 
-def addSpace(spaceName, parentSpaceName):
+def addSpace(spaceName, parentSpaceName, user):
     cur = connectToDB()
     new_space_id = max_space_id(cur)
     print(parentSpaceName)
@@ -253,7 +253,7 @@ def addSpace(spaceName, parentSpaceName):
         #Returns 409 if the space already exists.
         return 409"""
     
-    cur.execute("INSERT INTO space (space_id, space_name, parentspace_id) VALUES (?, ?, ?)",(new_space_id, spaceName, parentSpaceId))
+    cur.execute("INSERT INTO space (space_id, space_name, parentspace_id, owner_id) VALUES (?, ?, ?, ?)",(new_space_id, spaceName, parentSpaceId, user))
         
     return 200
 
@@ -381,7 +381,7 @@ def deleteItem(item_name):
         pass
 
 
-def quickAddItem(itemName, parentSpaceID):
+def quickAddItem(itemName, parentSpaceID, owner):
     cur = connectToDB()
     new_item_id = max_item_id(cur)
     print(parentSpaceID)
@@ -400,13 +400,58 @@ def quickAddItem(itemName, parentSpaceID):
         # Returns 410 if the item already exists.
         return 410
 
-    cur.execute("INSERT INTO item (item_id, item_name, quantity, space_id) VALUES (?, ?, 1, ?)",
-                (new_item_id, itemName, parentSpaceID))
+    cur.execute("INSERT INTO item (item_id, item_name, quantity, space_id, owner_id) VALUES (?, ?, 1, ?, ?)",
+                (new_item_id, itemName, parentSpaceID, owner))
 
     return 200
 
+def get_all_spaces(user):
+    cur = connectToDB()
+
+    cur.execute("SELECT * FROM space WHERE owner_id = ?", (user, ))
+    lists = cur.fetchall()
+    spaces = {}
+    for x in lists:
+        spaces[x[0]] = x[1]
+
+    return spaces
+
+
+
+    #This is a big ol stank dookie recursive sql statement that results in saying the space table doesn't exist
+    #in our database... if someone wants to figure this out I'm good with it, otherwise I'm gonna just add an owner
+    #section to all spaces and items to make it easier.
+
+    #cur.execute("WITH RECURSIVE spaces AS (SELECT space.* FROM space WHERE space_id = ? UNION ALL SELECT space.* FROM space, spaces WHERE space.parentspace_id = spaces.space_id) SELECT * FROM spaces" , (rootSpace, ))
+    #items = cur.fetchall()
+    #for x in items:
+    #    print(x)
+
+def addItem(item_name, description, quantity, consumable, space_id, owner_id, image):
+    cur = connectToDB()
+    new_item_id = max_item_id(cur)
+
+#checks to see if space exists
+    try:
+        cur.execute("SELECT space_id FROM space WHERE space_id =?", (space_id,))
+        parentSpaceId = cur.fetchone()
+        parentSpaceId = parentSpaceId[0]
+        if parentSpaceId == None:
+            raise Exception('e')
+        else:
+            pass
+    except:
+        # Returns 409 if the parent space doesn't exist.
+        return 409
+
+    if image != None:
+        image = owner_id + "*" + str(new_item_id)
+        cur.execute("INSERT INTO item VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (new_item_id, item_name, description, quantity, consumable, image, space_id, owner_id))
+        return str(new_item_id)
+    else:
+        cur.execute("INSERT INTO item (item_id, item_name, description, quantity, consumable, space_id, owner_id) VALUES (?, ?, ?, ?, ?, ?, ?)", (new_item_id, item_name, description, quantity, consumable, space_id, owner_id))
+
+    return 200
 
 #Testing
-code = quickAddItem('rabo', 39)
-print(code)
-
+get_all_spaces("test_subject1")
