@@ -21,11 +21,11 @@ def connectToDB():
             password="Graduation",
             host="127.0.0.1",
             port=3306,
-            database="tabs_db",
+            database="Tabs_DB",
 
-            # user="root",
-            # password="capstone"
-            # database="pis_db"
+        
+            #user="root",
+            #password="root"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -375,12 +375,38 @@ def deleteItem(item_name):
     try:
         # pass
         cur = connectToDB()
-        cur.execute("DELETE FROM item WHERE item_id = ?" (item_name,))
+        item_name = int(item_name)
+        cur.execute("DELETE FROM item WHERE item_id = ?", (item_name,))
     except:
         pass
 
 
+def quickAddItem(itemName, parentSpaceID):
+    cur = connectToDB()
+    new_item_id = max_item_id(cur)
+    print(parentSpaceID)
+    try:
+        cur.execute("SELECT item_name FROM item WHERE space_id =?", (parentSpaceID,))
+        presentItemLists = cur.fetchall()
+        presentItems = []
+        for item in presentItemLists:
+            presentItems.append(item[0])
+
+        if itemName in presentItems:
+            raise Exception('e')
+        else:
+            pass
+    except:
+        # Returns 410 if the item already exists.
+        return 410
+
+    cur.execute("INSERT INTO item (item_id, item_name, quantity, space_id) VALUES (?, ?, 1, ?)",
+                (new_item_id, itemName, parentSpaceID))
+
+    return 200
+
 
 #Testing
-pace = get_space(13)
-print(pace)
+code = quickAddItem('rabo', 39)
+print(code)
+

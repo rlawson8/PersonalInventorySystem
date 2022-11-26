@@ -1,52 +1,33 @@
-<!DOCTYPE html>
-<html lang="en" class="h-100">
-<head>
-  <title>Personal Inventory System</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% extends "navigation.html" %}
+
+{% block title %}Tabs-Registration{% endblock %}
+
+{% block customCSS %}
   <link rel="stylesheet" href="../static/login.css">
-  <link rel="stylesheet" href="../static/navigation.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../static/common.js"></script>
-</head>
-<body>
+{% endblock %}
 
-  <nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0; background: #004E89;">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand name" href="/home">Personal Inventory System</a>
-      </div>
-  
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/design">Space Design</a></li>
-          <li><a href="/load">Load Item</a></li>
-          <li><a href="/find">Find Item</a></li>
-          <li class="dropdown show">
-              <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                {% if current_user.is_authenticated %}
-                <a class="dropdown-item" href="/logout">Logout</a>
-                {% else %}
-                  <a class="dropdown-item" href="/login">Login</a><br>
-                  <a class="dropdown-item" href="/createAccount">Register</a><br>
-                {% endif %}
-              </div>
-          </li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
+{% block customJS %}
+<script>
+    function myValidation() {
+        if (document.getElementById("email").value != document.getElementById("email-repeat").value)
+        {
+            alert('Your emails don\'t match or you\'re missing a field.');
+            event.preventDefault();
+            return false;
+        }
+        else if (document.getElementById("pwd").value != document.getElementById("pwd-repeat").value){
+            alert('Your passwords don\'t match or you\'re missing a field.');
+            event.preventDefault();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+</script>
+{% endblock %}
 
+{% block content %}
 
 <div class="container" id="mainFormDiv">
     <h2 name="headerTag">Register</h2>
@@ -90,25 +71,5 @@
         </div>
     </form>
 </div>
-<script>
-    function myValidation() {
-        if (document.getElementById("email").value != document.getElementById("email-repeat").value)
-        {
-            alert('Your emails don\'t match or you\'re missing a field.');
-            event.preventDefault(); 
-            return false;
-        } 
-        else if (document.getElementById("pwd").value != document.getElementById("pwd-repeat").value){
-            alert('Your passwords don\'t match or you\'re missing a field.');
-            event.preventDefault(); 
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-</script>
-</body>
-</html>
-
+{% endblock %}
 <!-- after this then load the login page so they can login -->

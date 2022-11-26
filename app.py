@@ -8,7 +8,7 @@ from flask_login import LoginManager, login_required, current_user, login_user, 
 app = Flask(__name__)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=80)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -21,7 +21,7 @@ def load_user(user_id):
     return user
 
 @app.route('/')
-def hello_world():
+def hello_moto():
     return render_template("HomePage.html")
 
 @app.route('/home')
@@ -124,6 +124,20 @@ def space_design():
             space = get_space(user.rootSpace)
 
             return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id)
+        elif 'addItem' in request.form:
+            itemName = request.form['itemName']
+            parentSpaceID = request.form['parentSpaceID']
+
+            action = quickAddItem(itemName, parentSpaceID)
+            space = get_space(parentSpaceID)
+            print(action)
+            if action == 410:
+                flash('This item already exists.')
+                return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name,
+                                       space_id=space.id)
+            else:
+                return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name,
+                                       space_id=space.id)
         else:
             pass
 
