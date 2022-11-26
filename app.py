@@ -103,12 +103,12 @@ def space_design():
             space = get_space(parentSpaceName)
             if action == 409:
                 flash('Space name already exists')
-                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
             elif action == 410:
                 flash('Parent space does not exist')
-                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
             else:
-                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
         elif 'deleteform' in request.form:
             # parentSpaceName = request.form['parentSpaceName']
             # space = get_space(parentSpaceName)
@@ -123,7 +123,7 @@ def space_design():
             user = load_user(session['_user_id'])
             space = get_space(user.rootSpace)
 
-            return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id)
+            return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id, parent_space=space.parent_space)
         elif 'addItem' in request.form:
             itemName = request.form['itemName']
             parentSpaceID = request.form['parentSpaceID']
@@ -134,10 +134,10 @@ def space_design():
             if action == 410:
                 flash('This item already exists.')
                 return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name,
-                                       space_id=space.id)
+                                       space_id=space.id, parent_space=space.parent_space)
             else:
                 return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name,
-                                       space_id=space.id)
+                                       space_id=space.id, parent_space=space.parent_space)
         else:
             pass
 
@@ -155,7 +155,7 @@ def space_design():
     spaceName = "Bobert's Space"
     """
 
-    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space=space.parent_space)
 
 @app.route('/details')
 @login_required
