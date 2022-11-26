@@ -149,6 +149,7 @@
             <!-- <label for="spaceName"><b>Space/Item Name</b></label> -->
             <!-- <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required> -->
             <input type="hidden" value="DeleteForm" name="formSelector">
+            <input type="hidden" value="{{ space_id }}" name="parentSpaceName">
             <button type="submit" name="deleteform" class="btn">Save</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>

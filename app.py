@@ -114,6 +114,8 @@ def space_design():
             # space = get_space(parentSpaceName)
             itemChoice = request.form['choice1']
             subspaceChoice = request.form['choice2']
+            parentSpaceName = request.form['parentSpaceName']
+
             print(itemChoice)
             print(subspaceChoice)
 
@@ -121,7 +123,7 @@ def space_design():
             deleteItem(itemChoice)
 
             user = load_user(session['_user_id'])
-            space = get_space(user.rootSpace)
+            space = get_space(parentSpaceName)
 
             return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id, parent_space=space.parent_space)
         elif 'addItem' in request.form:
