@@ -178,13 +178,10 @@ def detail_page():
         if code == 200:
             #Makes the path for the photo.
             photoName = str(current_user.userID) + '*' + str(item_id) + '.jpg'
-
-            #Preps the image.
-            prepImage(photoName)
-            print('Photo prep complete.')
-
-            photoName = '*' + photoName
             photo = "./static/images/tmp/" + photoName
+            #Preps the image.
+            prepImage(photo)
+            print('Photo prep complete.')
 
             item = getItem(item_id)
             space = get_space(item.spaceID)
@@ -194,8 +191,8 @@ def detail_page():
             item = getItem(item_id)
             space = get_space(item.spaceID)
             return render_template("itemdetails.html", item_name = item.itemName, space_name = space.name, space_id = space.id,item_quantity = item.quantity, item_consumable = item.consumable, item_description = item.description, item_image = None)
-    except:
-        print("An exception has occured.")
+    except Exception as e:
+        print(e)
     return render_template("itemdetails.html")
 
 @app.route('/load', methods=['GET','POST'])
