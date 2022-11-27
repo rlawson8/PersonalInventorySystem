@@ -181,11 +181,12 @@ def loading_page():
             consumable = 0
         if 'description' in request.form:
             description = request.form['description']
-        if 'file' in request.files:
+        pic = request.files['uploadfile']
+        pic = pic.filename
+        if pic != '':
             print("It sees a pic")
-            picture = request.files['file']
-            #Maybe
-            #picture - request.files['file']
+            picture = request.files['uploadfile']
+
             picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture.filename))
             filename = picture.filename
             code = addItem(name, description, quantity, consumable, space, current_user.userID, filename)

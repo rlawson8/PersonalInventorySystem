@@ -68,8 +68,8 @@ def connectToS3():
         aws_access_key_id='AKIA2XTPVX4V6IHG55MK',
         aws_secret_access_key='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'
     )
-    for bucket in s3.buckets.all():
-        print(bucket.name)
+    #for bucket in s3.buckets.all():
+    #    print(bucket.name)
 
     return s3
 def uploadPhoto(filename,item_id, user_id):
