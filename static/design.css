@@ -103,6 +103,7 @@ button:hover {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    text-align: center;
  }
 
 .item-card {

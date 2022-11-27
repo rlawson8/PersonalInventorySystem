@@ -1,97 +1,84 @@
-
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-  <title>Personal Inventory System</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% extends "navigation.html" %}
+{% block title %}Item Loading{% endblock %}
+{% block customCSS %}
   <link rel="stylesheet" href="../static/load.css">
-  <link rel="stylesheet" href="../static/navigation.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../static/common.js"></script>
-</head>
-<body>
+{% endblock %}
 
-    <nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0px; background: #004E89;">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/home"><img src="../static/images/Tabs2.png" alt="Logo" style="width: 150px; height: auto;"></a>
-          </div>
-      
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right ">
-              <li class="hover-underline-animation"><a href="/design">Space Design</a></li>
-              <li class="hover-underline-animation"><a href="/load">Load Item</a></li>
-              <li class="hover-underline-animation"><a href="/find">Find Item</a></li>
-              <li class="dropdown show hover-underline-animation">
-                <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  {% if current_user.is_authenticated %}
-                  <a class="dropdown-item" href="/logout">Logout</a>
-                  {% else %}
-                    <a class="dropdown-item" href="/login">Login</a><br>
-                    <a class="dropdown-item" href="/createAccount">Register</a><br>
-                  {% endif %}
-                </div>
-              </li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-      </nav>
-      
+{% block customJS %}
+<!--If there's any javascript for this page put it here in script tags. -->
+{% endblock %}
+
+ {% block content %}
+     {% with messages = get_flashed_messages() %}
+     {% if messages %}
+        <p class="notification is-danger">
+            {{ messages[0] }}
+        </p>
+     {% endif %}
+     {% endwith %}
       <div class="container">
         <h2>Load Item</h2>
-        <form>
+
+  <!-- Start of form. -->
+        <form action="/load" method="post" enctype="multipart/form-data">
+  <!-- Row 1. -->
             <div class="form-group row" id="loadItemsForm">
+  <!-- Item name input. -->
                 <div class="col-sm-6">
                     <div id="labelAlign">
                         <label for="itemName">Item*</label><br><br>
                     </div>
                     <div id="rowDiv">
-                        <input type="text"  id="itemName" name="itemName" required>
+                        <input type="text"  id="itemName" placeholder="Item Name" name="itemName" required>
                     </div>
                 </div>
+
+ <!-- Group input. -->
                 <div class="col-sm-6">
                     <div id="labelAlign">
                         <label for="groupName">Group*</label><br><br>
                     </div>
                     <div id="rowDiv">
-                        <input type="text"  id="groupName" name="GroupName" required><br>
+                        <select name="groupName" class = "dd">
+                            {% for key, value in spaces.items() %}
+                                <option value="{{ key }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+                    <br>
                 </div>
             </div>
             <br>
             <br>
+
+ <!-- Start of next row. -->
             <div class="form-group row">
+
+ <!-- Quantity input. -->
                 <div class="col-sm-6" >
                     <div id="rowDiv">
                         <div id="labelAlign">
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" name="quantity" min="1" max="100" required>
+                            <input type="number" id="quantity" value=1 name="quantity" min="1" max="100" required>
                         </div>
                     </div>
                     <br>
                     <br>
                 </div>
+
+ <!-- Consumable input. -->
                 <div class="col-sm-6" >
                     <div id="rowDiv">
                         <div id="labelAlign">
                             <label for="consumable">Consumable</label>
-                            <input type="checkbox" id="consumable" name="consumable" value="yes">
+                            <input type="checkbox" id="consumable" name="consumable" value="1">
                         </div>
                     </div>
                 </div>
             </div>
             <br>
+
+ <!-- Description input. -->
             <div id="descriptionDiv">
                 <div id="desLabelAlign">
                     <label for="description" id="descriptionLabel">Description</label>
@@ -103,13 +90,17 @@
                 </div>
             </div>
             <br>
+
+ <!-- Image input. -->
             <div id="image">
                 <div id="imageLabel">
                     <label for="insertPic">Image</label><br>
                 </div>
                 <br>
-                <input type="file" id="insertPic" name="insertPic" accept="image/*" >
+                <input type="file" id="insertPic" name="uploadfile" accept="image/*" >
             </div>
+
+ <!-- Buttons. -->
             <div class="form-group row">
                 <div class="col-sm-6">
                     <div id="buttonRow">
@@ -124,6 +115,5 @@
             </div>
         </form>
       </div>
-      
-</body>
-</html>
+
+{% endblock %}

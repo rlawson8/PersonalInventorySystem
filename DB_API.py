@@ -21,11 +21,11 @@ def connectToDB():
             password="Graduation",
             host="127.0.0.1",
             port=3306,
-            database="tabs_db",
+            database="Tabs_DB",
 
-            # user="root",
-            # password="capstone"
-            # database="pis_db"
+
+            #user="root",
+            #password="root"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -50,6 +50,16 @@ class Space_Object:
         self.id = id
         self.parent_space = parent_space
 
+class Item_Object:
+    def __init__(self, itemID, itemName, description, quantity, consumable, image, spaceID, ownerID):
+        self.itemID = itemID
+        self.itemName = itemName
+        self.description = description
+        self.quantity = quantity
+        self.consumable = consumable
+        self.image = image
+        self.spaceID = spaceID
+        self.ownerID = ownerID
 
 #Checks if a username is taken. If it is the function exits with code 409. If not it checks if email is taken. If it is
 #the function exits with code 410. If not it goes on to add the user and exits with code 200.
@@ -226,7 +236,7 @@ def user_login(username, password):
 
 
 
-def addSpace(spaceName, parentSpaceName):
+def addSpace(spaceName, parentSpaceName, user):
     cur = connectToDB()
     new_space_id = max_space_id(cur)
     print(parentSpaceName)
@@ -253,7 +263,7 @@ def addSpace(spaceName, parentSpaceName):
         #Returns 409 if the space already exists.
         return 409"""
     
-    cur.execute("INSERT INTO space (space_id, space_name, parentspace_id) VALUES (?, ?, ?)",(new_space_id, spaceName, parentSpaceId))
+    cur.execute("INSERT INTO space (space_id, space_name, parentspace_id, owner_id) VALUES (?, ?, ?, ?)",(new_space_id, spaceName, parentSpaceId, user))
         
     return 200
 
@@ -375,12 +385,103 @@ def deleteItem(item_name):
     try:
         # pass
         cur = connectToDB()
-        cur.execute("DELETE FROM item WHERE item_id = ?" (item_name,))
+        item_name = int(item_name)
+        cur.execute("DELETE FROM item WHERE item_id = ?", (item_name,))
     except:
         pass
 
 
+def quickAddItem(itemName, parentSpaceID, owner):
+    cur = connectToDB()
+    new_item_id = max_item_id(cur)
+    print(parentSpaceID)
+    try:
+        cur.execute("SELECT item_name FROM item WHERE space_id =?", (parentSpaceID,))
+        presentItemLists = cur.fetchall()
+        presentItems = []
+        for item in presentItemLists:
+            presentItems.append(item[0])
+
+        if itemName in presentItems:
+            raise Exception('e')
+        else:
+            pass
+    except:
+        # Returns 410 if the item already exists.
+        return 410
+
+    cur.execute("INSERT INTO item (item_id, item_name, quantity, space_id, owner_id) VALUES (?, ?, 1, ?, ?)",
+                (new_item_id, itemName, parentSpaceID, owner))
+
+    return 200
+
+def get_all_spaces(user):
+    cur = connectToDB()
+
+    cur.execute("SELECT * FROM space WHERE owner_id = ?", (user, ))
+    lists = cur.fetchall()
+    spaces = {}
+    for x in lists:
+        spaces[x[0]] = x[1]
+
+    return spaces
+
+
+
+    #This is a big ol stank dookie recursive sql statement that results in saying the space table doesn't exist
+    #in our database... if someone wants to figure this out I'm good with it, otherwise I'm gonna just add an owner
+    #section to all spaces and items to make it easier.
+
+    #cur.execute("WITH RECURSIVE spaces AS (SELECT space.* FROM space WHERE space_id = ? UNION ALL SELECT space.* FROM space, spaces WHERE space.parentspace_id = spaces.space_id) SELECT * FROM spaces" , (rootSpace, ))
+    #items = cur.fetchall()
+    #for x in items:
+    #    print(x)
+
+def addItem(item_name, description, quantity, consumable, space_id, owner_id, image):
+    cur = connectToDB()
+    new_item_id = max_item_id(cur)
+
+#checks to see if space exists
+    try:
+        cur.execute("SELECT space_id FROM space WHERE space_id =?", (space_id,))
+        parentSpaceId = cur.fetchone()
+        parentSpaceId = parentSpaceId[0]
+        if parentSpaceId == None:
+            raise Exception('e')
+        else:
+            pass
+    except:
+        # Returns 409 if the parent space doesn't exist.
+        return 409
+
+    if image != None:
+        image = owner_id + "*" + str(new_item_id)
+        cur.execute("INSERT INTO item VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (new_item_id, item_name, description, quantity, consumable, image, space_id, owner_id))
+        return str(new_item_id)
+    else:
+        cur.execute("INSERT INTO item (item_id, item_name, description, quantity, consumable, space_id, owner_id) VALUES (?, ?, ?, ?, ?, ?, ?)", (new_item_id, item_name, description, quantity, consumable, space_id, owner_id))
+
+    return 200
+
+def getItem(item_id):
+    cur = connectToDB()
+
+    try:
+        cur.execute("SELECT * FROM item WHERE item_id = ?", (item_id, ))
+        item = cur.fetchone()
+        item_name = item[1]
+        item_description = item[2]
+        item_quantity = item[3]
+        item_consumable = item[4]
+        item_image = item[5]
+        item_spaceID = item[6]
+        item_ownerID = item[7]
+
+        return_object = Item_Object(item_id, item_name, item_description, item_quantity, item_consumable, item_image, item_spaceID, item_ownerID)
+        return(return_object)
+    except:
+        return 410
 
 #Testing
-pace = get_space(13)
-print(pace)
+#get_all_spaces("test_subject1")
+

@@ -1,6 +1,9 @@
 #Using the BCrypt Algorith to hash and salt the password
 import bcrypt
-from DB_API import newUser, user_login, get_user
+from DB_API import newUser, user_login, get_user, user
+import boto3
+import os
+from PIL import Image, ImageDraw, ImageFilter
 
 
 #Adding pepper
@@ -59,21 +62,72 @@ def login(username, password):
     else:
         return action
 
+def connectToS3():
+    s3 = boto3.resource(
+        service_name='s3',
+        region_name='us-east-2',
+        aws_access_key_id='AKIA2XTPVX4V6IHG55MK',
+        aws_secret_access_key='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'
+    )
+    #for bucket in s3.buckets.all():
+    #    print(bucket.name)
+
+    return s3
+def uploadPhoto(filename,item_id, user_id):
+    filename = "./static/images/tmp/" + filename
+    item_id = str(item_id)
+    user_id = str(user_id)
+    key = user_id + '*' + item_id
+    s3 = connectToS3()
+    s3.Bucket("tabsbucket").upload_file(Filename=filename, Key=key)
+    if os.path.exists(filename):
+        os.remove(filename)
+    else:
+        print("File doesn't exist.")
+    return 200
+
+def getPhoto(user_id, item_id):
+    item_id = str(item_id)
+    user_id = str(user_id)
+    key = user_id + '*' + item_id
+    location = "./static/images/tmp/" + key + ".jpg"
+
+    try:
+        s3 = connectToS3()
+        #photo = s3.Bucket("tabsbucket").Object(key).get()
+        s3.Bucket("tabsbucket").download_file(key, location)
+        return 200
+    except:
+        return 410
+
+
+def prepImage(photo):
+    image = Image.open(photo)
+    #gets image size for reference
+    width, height = image.size
+    print("Sizes gotten.")
+    print(width)
+    print(height)
+    #crops image into the largest square it can
+    if width > height:
+        print("Width>Height")
+        crop_width = ((width-height) //2)
+        image = image.crop((0 + crop_width, 0, width - crop_width, height))
+    elif height > width:
+        print("Height>Width")
+        crop_height = ((height - width) //2)
+        #print(crop_height)
+        image = image.crop((0, 0 + crop_height, width, height - crop_height))
+    else:
+        print("Height==Width")
+
+    print("image cropped")
+    image = image.resize((350, 350))
+    print("image sized")
+    print(photo)
+    image = image.convert('RGB')
+    image.save(photo)
 
 ###Test Area###
-"""
-result = user_load('ilnam')
-print(result)
+#code = uploadPhoto("test_subject1*17.png", 17, "test_subject1")
 
-result = hash('asdfg')
-print(result)
-testPass = 'asdfg' + _pepper
-if bcrypt.checkpw(testPass.encode('utf-8'), result):
-    print('match')
-else:
-    print('no dice')
-
-code = login('trevorB', testPass)
-print(code)
-
-bdb = hash('abc123')"""

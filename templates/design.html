@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Space Design!</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!--Starts with template doc.-->
+{% extends "navigation.html" %}
+
+<!--Add title-->
+{% block title %}Design Page{% endblock %}
+
+<!--Add any CSS specific to the page.-->
+{% block customCSS %}
   <link rel="stylesheet" href="../static/design.css">
-  <link rel="stylesheet" href="../static/navigation.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../static/common.js"></script>
+{% endblock %}
+
+<!-- Add any JS specific too the page.-->
+{% block customJS %}
   <script>
     deleteElement = function(){
         //HANDLE ELEMENT DELETION
@@ -23,47 +24,50 @@
     function openDeleteForm() {
         document.getElementById("deleteForm").style.display = "block";
     }
+    function openQuickAddForm(){
+        document.getElementById("quickAddForm").style.display = "block";
+    }
     function closeForm() {
         document.getElementById("myForm").style.display = "none";
+        document.getElementById("quickAddForm").style.display = "none";
         document.getElementById("deleteForm").style.display = "none";
     }
   </script>
-</head>
-<body>
+{% endblock %}
 
-    <nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0px; background: #004E89;">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/home"><img src="../static/images/Tabs2.png" alt="Logo" style="width: 150px; height: auto;"></a>
-          </div>
-      
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right ">
-              <li class="hover-underline-animation"><a href="/design">Space Design</a></li>
-              <li class="hover-underline-animation"><a href="/load">Load Item</a></li>
-              <li class="hover-underline-animation"><a href="/find">Find Item</a></li>
-              <li class="dropdown show hover-underline-animation">
-                <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  {% if current_user.is_authenticated %}
-                  <a class="dropdown-item" href="/logout">Logout</a>
-                  {% else %}
-                    <a class="dropdown-item" href="/login">Login</a><br>
-                    <a class="dropdown-item" href="/createAccount">Register</a><br>
-                  {% endif %}
-                </div>
-              </li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-      </nav>
+<nav class="navbar navbar-default navbar-static-top" id="custom-nav" style="margin-bottom: 0; background: #004E89;">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand name" href="/home">Personal Inventory System</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/design">Space Design</a></li>
+        <li><a href="/load">Load Item</a></li>
+        <li><a href="/find">Find Item</a></li>
+        <li class="dropdown show">
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              {% if current_user.is_authenticated %}
+                <a class="dropdown-item" href="/logout">Logout</a>
+              {% else %}
+                <a class="dropdown-item" href="/login">Login</a><br>
+                <a class="dropdown-item" href="/createAccount">Register</a><br>
+              {% endif %}
+            </div>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
 <div class="container" id="mainFormDiv"> <!-- Populate this with the subspaces and spaces -->
     {% if parent_space %}
@@ -81,6 +85,8 @@
 </div>
 <!-- <h1>{{ current_user.get_id() }}</h1> -->
 
+<!-- Space display section -->
+<!-- ******************************************************************************-->
 <div class="container-fluid">
     <h4>Spaces</h4>
     <section class="basic-grid">
@@ -94,6 +100,8 @@
 
 <hr/>
 
+<!-- Item display section -->
+<!-- ******************************************************************************-->
 <div class="container-fluid itemDisplay">
     <h4>Items</h4>
     <section class="basic-grid"> <!-- Populate this with the items -->
@@ -106,6 +114,8 @@
     </section>
 </div>
 
+<!-- Form for adding a space -->
+<!-- ******************************************************************************-->
     <div class="form-popup" id="myForm">
         <form action="/design" method="post" class="form-container">
           <h1>Add Space</h1>
@@ -117,12 +127,33 @@
 
           <label for="spaceName"><b>Space Name</b></label>
           <input type="text" placeholder="Enter Space Name" name="spaceName">
-      
+
           <button type="submit" class="btn" name="addspace" value="addSpaceBtn">Save</button>
           <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
 
+<!-- Form for adding a quick item -->
+<!-- ******************************************************************************-->
+    <div class="form-popup" id="quickAddForm">
+        <form action="/design" method="post" class="form-container">
+          <h1>QuickAdd Item</h1>
+
+          <!-- Hidden inputs for back end reference -->
+          <input type="hidden" value="{{ space_id }}" name="parentSpaceID">
+          <input type="hidden" value="quickAddForm" name="formSelector">
+
+          <!-- Other user inputs -->
+          <label for="itemName"><b>Item Name</b></label>
+          <input type="text" placeholder="Enter Item Name" name="itemName">
+
+          <button type="submit" class="btn" name="addItem" value="addItemBtn">Save</button>
+          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+
+<!-- Form for deleting an item or space -->
+<!-- ******************************************************************************-->
     <div class="form-popup" id="deleteForm">
         <form action="/design" method="post" class="form-container">
             <h1>Delete Item/Space</h1>
@@ -136,7 +167,7 @@
             <select name="choice1">
                 <option value="none">N/A</option>
                 {% for key, value in items.items() %}
-                <option value="{{ value }}">{{ key }}</option>
+                <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
             </select>
             <label for="choice2"><b>To delete a subspace choose one from the list below and hit save.</b></label>
@@ -146,25 +177,34 @@
                 <option value="{{ value }}">{{ key }}</option>
                 {% endfor %}
             </select>
-            
+
             <!-- <label for="spaceName"><b>Space/Item Name</b></label> -->
             <!-- <input type="text" placeholder="Enter Space/Item Name" name="spaceName" required> -->
             <input type="hidden" value="DeleteForm" name="formSelector">
+            <input type="hidden" value="{{ space_id }}" name="parentSpaceName">
             <button type="submit" name="deleteform" class="btn">Save</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
 
-<div class="footer"> <!--HOW DO WE WANT THESE BUTTONS TO COME AND GO BASED ON WHAT THE PAGE IS-->
+<!-- The actual footer buttons. -->
+<!-- ******************************************************************************-->
+<div class="footer">
     <div class="col-xs-4">
         <a onclick="openAddForm()">Add Space</a>
     </div>
     <div class="col-xs-4">
-        <a href="/load">Add Item</a>
+        <a onclick="openQuickAddForm()">Quick Add Item</a>
     </div>
     <div class="col-xs-4">
         <a onclick="openDeleteForm()">Delete</a>
     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <p class="notification is-danger">
+            {{ messages[0] }}
+        </p>
+    {% endif %}
+    {% endwith %}
 </div>
-</body>
-</html>
+{% endblock %}

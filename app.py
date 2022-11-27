@@ -1,19 +1,24 @@
 """Application entry point."""
 import flask_login
 from flask import Flask, render_template, request, url_for, flash, session
-from forms import registration, login
+from forms import registration, login, uploadPhoto, getPhoto, prepImage
 from DB_API import *
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
+import os
+from PIL import Image
+import werkzeug
+import json
 
 app = Flask(__name__)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=80)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 app.config['SECRET_KEY'] = '_5#y2LF4Q8z*n*xec]/'
+app.config['UPLOAD_FOLDER'] = './static/images/tmp/'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -21,7 +26,7 @@ def load_user(user_id):
     return user
 
 @app.route('/')
-def hello_world():
+def hello_moto():
     return render_template("HomePage.html")
 
 @app.route('/home')
@@ -99,21 +104,23 @@ def space_design():
             spaceName = request.form['spaceName']
             parentSpaceName = request.form['parentSpaceName']
 
-            action = addSpace(spaceName, parentSpaceName)
+            action = addSpace(spaceName, parentSpaceName, user.userID)
             space = get_space(parentSpaceName)
             if action == 409:
                 flash('Space name already exists')
-                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
             elif action == 410:
                 flash('Parent space does not exist')
-                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
             else:
-                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+                return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space = space.parent_space)
         elif 'deleteform' in request.form:
             # parentSpaceName = request.form['parentSpaceName']
             # space = get_space(parentSpaceName)
             itemChoice = request.form['choice1']
             subspaceChoice = request.form['choice2']
+            parentSpaceName = request.form['parentSpaceName']
+
             print(itemChoice)
             print(subspaceChoice)
 
@@ -121,9 +128,23 @@ def space_design():
             deleteItem(itemChoice)
 
             user = load_user(session['_user_id'])
-            space = get_space(user.rootSpace)
+            space = get_space(parentSpaceName)
 
-            return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id)
+            return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name, space_id=space.id, parent_space=space.parent_space)
+        elif 'addItem' in request.form:
+            itemName = request.form['itemName']
+            parentSpaceID = request.form['parentSpaceID']
+
+            action = quickAddItem(itemName, parentSpaceID, user.userID)
+            space = get_space(parentSpaceID)
+            print(action)
+            if action == 410:
+                flash('This item already exists.')
+                return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name,
+                                       space_id=space.id, parent_space=space.parent_space)
+            else:
+                return render_template("design.html", subspaces=space.spaces, items=space.items, space_name=space.name,
+                                       space_id=space.id, parent_space=space.parent_space)
         else:
             pass
 
@@ -141,17 +162,104 @@ def space_design():
     spaceName = "Bobert's Space"
     """
 
-    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id)
+    return render_template("design.html", subspaces = space.spaces, items = space.items, space_name = space.name, space_id = space.id, parent_space=space.parent_space)
 
 @app.route('/details')
 @login_required
 def detail_page():
+    try:
+        urlRequest = request.url
+        urlRequest = urlRequest.split('?')
+        urlRequest = urlRequest[1]
+        urlRequest = urlRequest.split('=')
+        item_id = urlRequest[1]
+        print(item_id)
+        code = getPhoto(current_user.userID, item_id)
+        if code == 200:
+            #Makes the path for the photo.
+            photoName = str(current_user.userID) + '*' + str(item_id) + '.jpg'
+            photo = "./static/images/tmp/" + photoName
+            #Preps the image.
+            prepImage(photo)
+            print('Photo prep complete.')
+
+            item = getItem(item_id)
+            space = get_space(item.spaceID)
+            print("With Pic")
+            return render_template("itemdetails.html", item_name = item.itemName, space_name = space.name, space_id = space.id, item_quantity = item.quantity, item_consumable = item.consumable, item_description = item.description, item_image = photo)
+        else:
+            item = getItem(item_id)
+            space = get_space(item.spaceID)
+            return render_template("itemdetails.html", item_name = item.itemName, space_name = space.name, space_id = space.id,item_quantity = item.quantity, item_consumable = item.consumable, item_description = item.description, item_image = None)
+    except Exception as e:
+        print(e)
     return render_template("itemdetails.html")
 
-@app.route('/load')
+@app.route('/load', methods=['GET','POST'])
 @login_required
 def loading_page():
-    return render_template("loaditems.html")
+    if request.method == "POST":
+        name = request.form['itemName']
+        space = request.form['groupName']
+        quantity = request.form['quantity']
+        if 'consumable' in request.form:
+            consumable = request.form['consumable']
+        else:
+            consumable = 0
+        if 'description' in request.form:
+            description = request.form['description']
+        pic = request.files['uploadfile']
+        pic = pic.filename
+        if pic != '':
+            print("It sees a pic")
+            picture = request.files['uploadfile']
+
+            picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture.filename))
+            filename = picture.filename
+            code = addItem(name, description, quantity, consumable, space, current_user.userID, filename)
+            if code == 409:
+                flash("Space name does not exist")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+            elif code == 200:
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+            else:
+                code == uploadPhoto(filename, code, current_user.userID)
+                flash("Success!")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+        else:
+            code = addItem(name, description, quantity, consumable, space, current_user.userID, None)
+            if code == 409:
+                flash("Space name does not exist")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+            else:
+                flash("Success!")
+                cu = current_user.userID
+                spaces = get_all_spaces(cu)
+                return render_template("loaditems.html", spaces = spaces)
+    else:
+
+
+    #Get data for drop down.
+        cu = current_user.userID
+        spaces = get_all_spaces(cu)
+        return render_template("loaditems.html", spaces = spaces)
+
+"""
+@app.route('/itemSearch', methods=["POST", "GET"])
+def findResults():
+    if request.method == "POST" :
+        search_word = request.form['search_word']
+        print(search_word)
+    return json.jsonify({'data': render_template(response.html, search_word=search_word)})
+"""
 
 @app.route('/find')
 @login_required
