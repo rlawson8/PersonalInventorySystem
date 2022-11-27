@@ -178,11 +178,13 @@ def detail_page():
         if code == 200:
             #Makes the path for the photo.
             photoName = str(current_user.userID) + '*' + str(item_id) + '.jpg'
-            photo = "./static/images/tmp/" + photoName
 
             #Preps the image.
-            prepImage(photo)
+            prepImage(photoName)
             print('Photo prep complete.')
+
+            photoName = '*' + photoName
+            photo = "./static/images/tmp/" + photoName
 
             item = getItem(item_id)
             space = get_space(item.spaceID)

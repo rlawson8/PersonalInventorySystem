@@ -101,9 +101,12 @@ def getPhoto(user_id, item_id):
         return 410
 
 
-def prepImage(path):
-    print(path)
-    image = Image.open(path)
+def prepImage(photoName):
+    print(photoName)
+    path = './static/images/tmp/'
+    photo = path + photoName
+    editedPhoto = path + '*' + photoName
+    image = Image.open(photo)
     #gets image size for reference
     width, height = image.size
     print("Sizes gotten.")
@@ -125,7 +128,8 @@ def prepImage(path):
     print("image cropped")
     image = image.resize((350, 350))
     print("image sized")
-    image.save(path)
+    image.save(editedPhoto)
+    os.remove(photo)
 
 ###Test Area###
 #code = uploadPhoto("test_subject1*17.png", 17, "test_subject1")

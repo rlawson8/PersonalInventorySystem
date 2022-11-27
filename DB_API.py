@@ -484,4 +484,4 @@ def getItem(item_id):
 
 #Testing
 #get_all_spaces("test_subject1")
-code = getItem(17)
+
