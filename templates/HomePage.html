@@ -22,16 +22,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand name" href="/home">Personal Inventory System</a>
+      <a class="navbar-brand" href="/home"><img src="../static/images/Tabs2.png" alt="Logo" style="width: 150px; height: auto;"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/design">Space Design</a></li>
-        <li><a href="/load">Load Item</a></li>
-        <li><a href="/find">Find Item</a></li>
-        <li class="dropdown show">
+      <ul class="nav navbar-nav navbar-right ">
+        <li class="hover-underline-animation"><a href="/design">Space Design</a></li>
+        <li class="hover-underline-animation"><a href="/load">Load Item</a></li>
+        <li class="hover-underline-animation"><a href="/find">Find Item</a></li>
+        <li class="dropdown show hover-underline-animation">
           <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span class="glyphicon glyphicon-user"></span></a>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             {% if current_user.is_authenticated %}
