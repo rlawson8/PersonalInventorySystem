@@ -1,10 +1,11 @@
 """Application entry point."""
 import flask_login
 from flask import Flask, render_template, request, url_for, flash, session
-from forms import registration, login, uploadPhoto
+from forms import registration, login, uploadPhoto, getPhoto, prepImage
 from DB_API import *
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 import os
+from PIL import Image
 import werkzeug
 import json
 
@@ -166,6 +167,33 @@ def space_design():
 @app.route('/details')
 @login_required
 def detail_page():
+    try:
+        urlRequest = request.url
+        urlRequest = urlRequest.split('?')
+        urlRequest = urlRequest[1]
+        urlRequest = urlRequest.split('=')
+        item_id = urlRequest[1]
+        print(item_id)
+        code = getPhoto(current_user.userID, item_id)
+        if code == 200:
+            #Makes the path for the photo.
+            photoName = str(current_user.userID) + '*' + str(item_id) + '.jpg'
+            photo = "./static/images/tmp/" + photoName
+
+            #Preps the image.
+            prepImage(photo)
+            print('Photo prep complete.')
+
+            item = getItem(item_id)
+            space = get_space(item.spaceID)
+            print("With Pic")
+            return render_template("itemdetails.html", item_name = item.itemName, space_name = space.name, space_id = space.id, item_quantity = item.quantity, item_consumable = item.consumable, item_description = item.description, item_image = photo)
+        else:
+            item = getItem(item_id)
+            space = get_space(item.spaceID)
+            return render_template("itemdetails.html", item_name = item.itemName, space_name = space.name, space_id = space.id,item_quantity = item.quantity, item_consumable = item.consumable, item_description = item.description, item_image = None)
+    except:
+        print("An exception has occured.")
     return render_template("itemdetails.html")
 
 @app.route('/load', methods=['GET','POST'])

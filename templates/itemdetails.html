@@ -8,7 +8,7 @@
 
 {% block content %}
       <div class="container mainc"> <!-- so essentially we need to make the navbar the same and changing the style of this changes the navbar style on this page once we do the jinja templates though that might go away or just change the class names or something-->
-        <!-- <a href="/design?space_id={{ parent_space }}" class = 'back_button'>Back</a> -->
+        <a href="/design?space_id={{ space_id }}" class = 'back_button'>Back</a>
         <h2 name="headerTag">{{ item_name }}</h2>
         <h3 name="subHeaderTag">{{ space_name }}</h2>
             <div class="row">
@@ -54,7 +54,7 @@
                             {% if item_image == "" %}
                             <label for="insertPic">Image</label><br>
                             {% else %}
-                            <img src="../static/images/itemimages/{{item_image}}" alt="No Image">
+                            <img src="{{item_image}}" alt="No Image">
                             {% endif %}
                         </div>
                     </div>

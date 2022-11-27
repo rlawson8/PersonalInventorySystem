@@ -3,6 +3,7 @@ import bcrypt
 from DB_API import newUser, user_login, get_user, user
 import boto3
 import os
+from PIL import Image, ImageDraw, ImageFilter
 
 
 #Adding pepper
@@ -90,12 +91,42 @@ def getPhoto(user_id, item_id):
     user_id = str(user_id)
     key = user_id + '*' + item_id
     location = "./static/images/tmp/" + key + ".jpg"
-    s3 = connectToS3()
-    #photo = s3.Bucket("tabsbucket").Object(key).get()
-    s3.Bucket("tabsbucket").download_file(key, location)
-    return 200
+
+    try:
+        s3 = connectToS3()
+        #photo = s3.Bucket("tabsbucket").Object(key).get()
+        s3.Bucket("tabsbucket").download_file(key, location)
+        return 200
+    except:
+        return 410
+
+
+def prepImage(path):
+    print(path)
+    image = Image.open(path)
+    #gets image size for reference
+    width, height = image.size
+    print("Sizes gotten.")
+    print(width)
+    print(height)
+    #crops image into the largest square it can
+    if width > height:
+        print("Width>Height")
+        crop_width = ((width-height) //2)
+        image = image.crop((0 + crop_width, 0, width - crop_width, height))
+    elif height > width:
+        print("Height>Width")
+        crop_height = ((height - width) //2)
+        #print(crop_height)
+        image = image.crop((0, 0 + crop_height, width, height - crop_height))
+    else:
+        print("Height==Width")
+
+    print("image cropped")
+    image = image.resize((350, 350))
+    print("image sized")
+    image.save(path)
 
 ###Test Area###
-code = getPhoto("test_subject1", 17)
-#code = uploadPhoto("cat.jpeg", 17, "test_subject1")
-print(code)
+#code = uploadPhoto("test_subject1*17.png", 17, "test_subject1")
+

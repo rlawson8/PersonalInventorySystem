@@ -50,6 +50,16 @@ class Space_Object:
         self.id = id
         self.parent_space = parent_space
 
+class Item_Object:
+    def __init__(self, itemID, itemName, description, quantity, consumable, image, spaceID, ownerID):
+        self.itemID = itemID
+        self.itemName = itemName
+        self.description = description
+        self.quantity = quantity
+        self.consumable = consumable
+        self.image = image
+        self.spaceID = spaceID
+        self.ownerID = ownerID
 
 #Checks if a username is taken. If it is the function exits with code 409. If not it checks if email is taken. If it is
 #the function exits with code 410. If not it goes on to add the user and exits with code 200.
@@ -453,5 +463,25 @@ def addItem(item_name, description, quantity, consumable, space_id, owner_id, im
 
     return 200
 
+def getItem(item_id):
+    cur = connectToDB()
+
+    try:
+        cur.execute("SELECT * FROM item WHERE item_id = ?", (item_id, ))
+        item = cur.fetchone()
+        item_name = item[1]
+        item_description = item[2]
+        item_quantity = item[3]
+        item_consumable = item[4]
+        item_image = item[5]
+        item_spaceID = item[6]
+        item_ownerID = item[7]
+
+        return_object = Item_Object(item_id, item_name, item_description, item_quantity, item_consumable, item_image, item_spaceID, item_ownerID)
+        return(return_object)
+    except:
+        return 410
+
 #Testing
-get_all_spaces("test_subject1")
+#get_all_spaces("test_subject1")
+code = getItem(17)
