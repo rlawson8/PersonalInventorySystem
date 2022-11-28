@@ -24,8 +24,8 @@ def connectToDB():
             database="Tabs_DB",
 
 
-            #user="root",
-            #password="root"
+            # user="root",
+            # password="root"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -117,7 +117,7 @@ def newUser(username, email, user_password):
     seasoning = user_password.salt
 
     #Writes the INSERT statements for the space and person.
-    cur.execute("INSERT INTO space (space_id, space_name) VALUES (?, ?)", (new_space_id, new_space_name))
+    cur.execute("INSERT INTO space (space_id, space_name, owner_id) VALUES (?, ?, ?)", (new_space_id, new_space_name, username))
     cur.execute("INSERT INTO person (user_id, email, password, root_space_id, seasoning) VALUES (?, ?, ?, ?, ?)", (username, email, password_hash, new_space_id, seasoning))
 
     #Test print.
