@@ -252,19 +252,24 @@ def loading_page():
         spaces = get_all_spaces(cu)
         return render_template("loaditems.html", spaces = spaces)
 
-"""
 @app.route('/itemSearch', methods=["POST", "GET"])
 def findResults():
     if request.method == "POST" :
         search_word = request.form['search_word']
         print(search_word)
-    return json.jsonify({'data': render_template(response.html, search_word=search_word)})
-"""
+        results = appFunctionSearch(search_word)
+        return json.jsonify({'data': render_template(response.html, search_word=search_word, results=results)})
+    return render_template("finditems.html")
 
-@app.route('/find')
+@app.route('/response')
 @login_required
 def query_page():
-    return "This is the query page."
+    if request.method == "POST" :
+        search_word = request.form['search_word']
+        print(search_word)
+        results = appFunctionSearch(search_word)
+        return json.jsonify({'data': render_template(response.html, search_word=search_word, results=results)})
+    return render_template("response.html")
 
 @app.route('/logout')
 @login_required
@@ -286,10 +291,9 @@ Interface with the buttons for add space, and delete. -- Reid
 
 Customize login required to not throw internal server error. --Trevor
 
-Finish loading page tasks. 
+Finish loading page tasks.
 
 For nav bar if you click on user icon it has drop down that has options for logout if the current_user.is_authenticated == True or login/registration if current_user.is_authenticated == False
 
 Hydrate
 """
-
