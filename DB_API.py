@@ -17,15 +17,15 @@ pepper = "Mizzou2022!_IMT"
 def connectToDB():
     try:
         db = mariadb.connect(
-            user="trevor",
-            password="Graduation",
+            # user="trevor",
+            # password="Graduation",
             host="127.0.0.1",
             port=3306,
             database="Tabs_DB",
 
 
-            # user="root",
-            # password="root"
+            user="root",
+            password="root"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -481,6 +481,21 @@ def getItem(item_id):
         return(return_object)
     except:
         return 410
+
+def appFunctionSearch(search_word):
+    cur = connectToDB()
+    search_word = search_word + "%"
+    items = []
+
+    ###Performs the database call for the items in a space.
+    cur.execute("SELECT i.item_name, s.space_name FROM item i JOIN space s ON i.space_id = s.space_id WHERE i.item_name LIKE ?", (search_word,))
+    for (item_name, space_name) in cur:
+        items.append([item_name, space_name])
+
+    ###Test print of the items list.###
+    print(items)
+    return items
+
 
 #Testing
 #get_all_spaces("test_subject1")
