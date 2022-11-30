@@ -37,15 +37,28 @@
 {% endblock %}
 
 {% block content %}
-<h1>Find Items</h1>
+<h2>Find Items</h2>
 
-    <form method = "post" action = "/itemSearch">
+
+    <form method = "POST" action = "/itemSearch" align="center">
         <input type="text" name="search" id="search_box" class="search_box">
         <input type="submit" value="Search" class="search_button">
     </form>
 
-    <div id="searchword">Search results for <span class="searchword"></span></div>
+    {% if items or spaces %}
+    <div id="searchword">Search results for <span class="search_word">{{ search_word }}</span></div>
     <div id="flash"></div>
-    <ol id="insert_search" class="update"></ol>
 
+        <div class="results">
+            <h3>Items</h3>
+            {% for key, value in items.items() %}
+             <a href="/details?item_id={{ key }}"> {{ value }} </a><br>
+            {% endfor %}
+            <br>
+            <h3>Spaces</h3>
+            {% for key, value in spaces.items() %}
+               <a href="/design?space_id={{ key }}">{{ value }}</a><br>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

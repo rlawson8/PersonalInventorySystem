@@ -1,3 +1,5 @@
+import os
+
 import mariadb
 import sys
 import bcrypt
@@ -24,8 +26,8 @@ def connectToDB():
             database="Tabs_DB",
 
 
-            # user="root",
-            # password="root"
+            #user="root",
+            #password="root"
         )
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
@@ -482,6 +484,54 @@ def getItem(item_id):
     except:
         return 410
 
+
+def appFunctionSearch(userID, searchWord):
+    search = searchWord.lower()
+    file = "./tmp/" + userID + "_search.txt"
+    f = open(file, "w+")
+    cur = connectToDB()
+    cur.execute("SELECT * FROM space WHERE owner_id = ?", (userID, ))
+    userSpaces = cur.fetchall()
+    for x in userSpaces:
+        id = x[0]
+        name = x[1]
+        f.write('space,' + str(id) + ',' + str(name) + ',' + str(name) +'\n')
+
+    cur.execute("SELECT * FROM item WHERE owner_id = ?", (userID, ))
+    userItems = cur.fetchall()
+    for x in userItems:
+        id = x[0]
+        name = x[1]
+        description =x[2]
+        f.write('item,' + str(id) + ',' + str(name) + ',' + str(description).strip() + '\n')
+
+    f.close()
+    f = open(file, "r")
+
+    spaces = {}
+    items = {}
+
+    for line in f:
+        thisThing = line.split(',')
+        if thisThing[0] == 'space':
+            if search in thisThing[1].lower() or search in thisThing[2].lower():
+                print(search + thisThing[1] + thisThing[2])
+                spaces[thisThing[1]] = thisThing[2]
+            else:
+                pass
+        else:
+            if search in thisThing[1].lower() or search in thisThing[2].lower() or search in thisThing[3].lower():
+                items[thisThing[1]] = thisThing[2]
+            else:
+                pass
+
+    f.close()
+
+    results = [spaces, items]
+    os.remove(file)
+
+    return results
+"""
 def appFunctionSearch(search_word):
     cur = connectToDB()
     search_word = search_word + "%"
@@ -496,7 +546,6 @@ def appFunctionSearch(search_word):
     print(items)
     return items
 
-
+"""
 #Testing
 #get_all_spaces("test_subject1")
-

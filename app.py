@@ -257,8 +257,15 @@ def findResults():
     if request.method == "POST" :
         search_word = request.form['search']
         print(search_word)
-        results = appFunctionSearch(search_word)
-        return json.jsonify({'data': render_template(response.html, search_word=search_word, results=results)})
+        results = appFunctionSearch(current_user.userID, search_word)
+
+        spaces = results[0]
+        items = results[1]
+
+        print(spaces)
+        print("Items")
+        print(items)
+        return render_template("finditems.html", search_word=search_word, spaces=spaces, items=items)
     return render_template("finditems.html")
 
 @app.route('/response')
@@ -268,7 +275,8 @@ def query_page():
         search_word = request.form['search']
         print(search_word)
         results = appFunctionSearch(search_word)
-        return json.jsonify({'data': render_template(response.html, search_word=search_word, results=results)})
+
+        return render_template(response.html, search_word=search_word, results=results)
     return render_template("response.html")
 
 @app.route('/logout')
@@ -282,18 +290,3 @@ def pageNotFound(error):
     flash('Please login or create an account first')
     return render_template("login.html")
 
-
-
-"""Things to do.
-Add back end for design page. -- Trevor
-
-Interface with the buttons for add space, and delete. -- Reid
-
-Customize login required to not throw internal server error. --Trevor
-
-Finish loading page tasks.
-
-For nav bar if you click on user icon it has drop down that has options for logout if the current_user.is_authenticated == True or login/registration if current_user.is_authenticated == False
-
-Hydrate
-"""
