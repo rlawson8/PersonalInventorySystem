@@ -255,7 +255,7 @@ def loading_page():
 @app.route('/itemSearch', methods=["POST", "GET"])
 def findResults():
     if request.method == "POST" :
-        search_word = request.form['search_word']
+        search_word = request.form['search']
         print(search_word)
         results = appFunctionSearch(search_word)
         return json.jsonify({'data': render_template(response.html, search_word=search_word, results=results)})
@@ -265,7 +265,7 @@ def findResults():
 @login_required
 def query_page():
     if request.method == "POST" :
-        search_word = request.form['search_word']
+        search_word = request.form['search']
         print(search_word)
         results = appFunctionSearch(search_word)
         return json.jsonify({'data': render_template(response.html, search_word=search_word, results=results)})

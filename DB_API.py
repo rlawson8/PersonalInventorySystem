@@ -482,6 +482,21 @@ def getItem(item_id):
     except:
         return 410
 
+def appFunctionSearch(search_word):
+    cur = connectToDB()
+    search_word = search_word + "%"
+    items = []
+
+    ###Performs the database call for the items in a space.
+    cur.execute("SELECT i.item_name, s.space_name FROM item i JOIN space s ON i.space_id = s.space_id WHERE i.item_name LIKE ?", (search_word,))
+    for (item_name, space_name) in cur:
+        items.append([item_name, space_name])
+
+    ###Test print of the items list.###
+    print(items)
+    return items
+
+
 #Testing
 #get_all_spaces("test_subject1")
 
