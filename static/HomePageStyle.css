@@ -68,3 +68,35 @@ h3 {
     border-left: 4px solid #004E89;
     padding-left: 10px;
 }
+
+@media (max-width: 600px) {
+    p {
+        display: none;
+        /* padding-right: 20px; */
+    }
+
+    h3 {
+        text-align: center;
+        /* padding-right: 106px; */
+        padding-bottom: 0px;
+        font-size: 20px;
+        line-height: 35px;
+    }
+
+    .login{
+        margin-top: 30px;
+    }
+
+    div {
+        text-align: center;
+        display: block;
+    }
+
+    .row{
+        margin-left: auto;
+    }
+
+    .col-md-3 {
+        margin-top: 30px;
+    }
+}
