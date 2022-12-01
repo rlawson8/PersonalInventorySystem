@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR</title>
+</head>
+<body>
+    <div id="qrcode"></div>
+    <br>
+    <br>
+    <p>http://keeptabs.net/design?space_id={{ space_id }}</p>
+
+<script src="../static/qrcode.js"></script>
+<script>
+    new QRCode(document.getElementById("qrcode"), "http://keeptabs.net/design?space_id={{ space_id }}");
+</script>
+
+</body>
+</html>

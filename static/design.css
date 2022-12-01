@@ -213,3 +213,12 @@ button:hover {
     font-size: 16px;
     color: white;
   }
+  #qrButton{
+      border-radius: 20px;
+      width:5%;
+      color: white;
+      background: #383F51;
+      display: block;
+      float: left;
+      margin-bottom:5px;
+  }

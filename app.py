@@ -1,13 +1,11 @@
 """Application entry point."""
 import flask_login
 from flask import Flask, render_template, request, url_for, flash, session
-from forms import registration, login, uploadPhoto, getPhoto, prepImage
+from forms import *
 from DB_API import *
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 import os
 from PIL import Image
-import werkzeug
-import json
 
 app = Flask(__name__)
 
@@ -175,6 +173,7 @@ def detail_page():
         item_id = urlRequest[1]
         print(item_id)
         code = getPhoto(current_user.userID, item_id)
+        print(code)
         if code == 200:
             #Makes the path for the photo.
             photoName = str(current_user.userID) + '*' + str(item_id) + '.jpg'
@@ -216,18 +215,18 @@ def loading_page():
 
             picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture.filename))
             filename = picture.filename
-            code = addItem(name, description, quantity, consumable, space, current_user.userID, filename)
+            print("picture saved")
+            code = addItem(name, description, quantity, consumable, space, current_user.userID, None)
+            id = get_itemID(name, current_user.userID)
+            print("item added")
+            print(code)
             if code == 409:
                 flash("Space name does not exist")
                 cu = current_user.userID
                 spaces = get_all_spaces(cu)
                 return render_template("loaditems.html", spaces = spaces)
-            elif code == 200:
-                cu = current_user.userID
-                spaces = get_all_spaces(cu)
-                return render_template("loaditems.html", spaces = spaces)
             else:
-                code == uploadPhoto(filename, code, current_user.userID)
+                code == uploadPhoto(filename, id, current_user.userID)
                 flash("Success!")
                 cu = current_user.userID
                 spaces = get_all_spaces(cu)
@@ -284,6 +283,55 @@ def query_page():
 def logout():
     logout_user()
     return render_template("HomePage.html")
+
+@app.route('/scannerLoad', methods=["GET", "POST"])
+@login_required
+def scannerLoad():
+    if request.method == "POST" :
+        barcode = request.form['barcode']
+        location = request.form['location']
+        space_id = location.split('?')
+        space_id = space_id[1]
+        space_id = space_id.split('=')
+        space_id = space_id[1]
+
+        print("Location: " + location + " Barcode: " + barcode + " Space: " + space_id)
+        item = productLookup(barcode, current_user.userID)
+
+        name = item[0]
+        description = item[1]
+        photoURL = item[2]
+        quantity = get_quantity(name, current_user.userID)
+
+        #have to stop now, but see if you can get it to increment the quantity.
+        code = addItem(name, description, quantity + 1, None, space_id, current_user.userID, barcode)
+        item_id = get_itemID(name, current_user.userID)
+        submitPhoto(photoURL, current_user.userID, item_id)
+        if code == 409:
+            flash("Space name does not exist")
+            cu = current_user.userID
+            spaces = get_all_spaces(cu)
+            return render_template("loaditems.html", spaces=spaces)
+        else:
+            flash("Success!")
+            cu = current_user.userID
+            spaces = get_all_spaces(cu)
+            return render_template("loaditems.html", spaces=spaces)
+
+
+        flash("Success!")
+        return render_template("scannerLoad.html")
+
+    return render_template("scannerLoad.html")
+
+@app.route('/qr', methods=["GET"])
+def qrPage():
+    urlRequest = request.url
+    urlRequest = urlRequest.split('?')
+    urlRequest = urlRequest[1]
+    urlRequest = urlRequest.split('=')
+    space_id = urlRequest[1]
+    return render_template("qr.html", space_id=space_id)
 
 @app.errorhandler(500)
 def pageNotFound(error):

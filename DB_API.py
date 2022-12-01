@@ -271,11 +271,11 @@ def addSpace(spaceName, parentSpaceName, user):
 
 
 def get_space(space_identifier):
-    print("It's hitting the function.")
+    #print("It's hitting the function.")
     cur = connectToDB()
     cur.execute("SELECT space_name, parentspace_id FROM space WHERE space_id = ?", (space_identifier,))
 
-    print("It's getting to the while loop.")
+    #print("It's getting to the while loop.")
     for x in cur:
         name = x
 
@@ -307,7 +307,7 @@ def get_space(space_identifier):
             break
 
     ###Test print of the items dict.###
-    print(items)
+    #print(items)
 
 
     ###Initialize empty subspace lists and dictionary.###
@@ -333,7 +333,7 @@ def get_space(space_identifier):
             break
 
     ###Test print of the concatinated dictionary###
-    print(subspaces)
+    #print(subspaces)
 
     #For later reference dictionary items are items, var name is name, subspaces are subspaces.
     if parent_space == None:
@@ -396,7 +396,7 @@ def deleteItem(item_name):
 def quickAddItem(itemName, parentSpaceID, owner):
     cur = connectToDB()
     new_item_id = max_item_id(cur)
-    print(parentSpaceID)
+    #print(parentSpaceID)
     try:
         cur.execute("SELECT item_name FROM item WHERE space_id =?", (parentSpaceID,))
         presentItemLists = cur.fetchall()
@@ -531,6 +531,31 @@ def appFunctionSearch(userID, searchWord):
     os.remove(file)
 
     return results
+
+def get_quantity(name, owner):
+    cur = connectToDB()
+    try:
+        cur.execute("SELECT quantity FROM item WHERE item_name = ? AND owner_id = ?", (name, owner))
+        quantity = cur.fetchone()
+        quantity = quantity[0]
+        if quantity == None:
+            quantity = 0
+
+        return quantity
+    except:
+        return 0
+
+def get_itemID(name, owner):
+    cur = connectToDB()
+    cur.execute("SELECT item_id FROM item WHERE item_name = ? AND owner_id = ?", (name, owner))
+    #cur.execute("SELECT * FROM item WHERE item_name = ?", (name,))
+    id = cur.fetchone()
+    if id is not None:
+        id = id[0]
+
+    print(id)
+    return id
+
 """
 def appFunctionSearch(search_word):
     cur = connectToDB()
@@ -549,3 +574,5 @@ def appFunctionSearch(search_word):
 """
 #Testing
 #get_all_spaces("test_subject1")
+#id = get_quantity("8", "test_subject1")
+#print(id)

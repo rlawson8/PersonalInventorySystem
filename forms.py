@@ -4,6 +4,8 @@ from DB_API import newUser, user_login, get_user, user
 import boto3
 import os
 from PIL import Image, ImageDraw, ImageFilter
+import requests
+import json
 
 
 #Adding pepper
@@ -63,17 +65,19 @@ def login(username, password):
         return action
 
 def connectToS3():
+    print("Function: connectToS3")
     s3 = boto3.resource(
         service_name='s3',
         region_name='us-east-2',
-        aws_access_key_id='AKIA2XTPVX4V6IHG55MK',
-        aws_secret_access_key='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'
+        aws_access_key_id='AKIA2XTPVX4VY6MMG5ZD',
+        aws_secret_access_key='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'
     )
     #for bucket in s3.buckets.all():
     #    print(bucket.name)
 
     return s3
 def uploadPhoto(filename,item_id, user_id):
+    print("Function: uploadPhoto")
     filename = "./static/images/tmp/" + filename
     item_id = str(item_id)
     user_id = str(user_id)
@@ -128,6 +132,64 @@ def prepImage(photo):
     image = image.convert('RGB')
     image.save(photo)
 
+
+def productLookup(barcode, cu):
+    url = "https://product-lookup-by-upc-or-ean.p.rapidapi.com/code/" + str(barcode)
+    headers = {
+        "X-RapidAPI-Key": "3dbeec8d00msh776115b9d0450a2p14917cjsn1603398d5c77",
+        "X-RapidAPI-Host": "product-lookup-by-upc-or-ean.p.rapidapi.com"
+    }
+
+
+    response = requests.request("GET", url, headers=headers)
+
+    print(response.text)
+    file = "./tmp/" + cu + "_search.json"
+    f = open(file, "w+")
+    f.write(response.text)
+    f.close()
+
+    with open(file) as json_file:
+        data = json.load(json_file)
+
+    name = data.get('product').get('name')
+    description = data.get('product').get('description')
+    brand = data.get('product').get('brand')
+    image_url = data.get('product').get('imageUrl')
+    description = "Brand: " + brand + "\n" + description
+
+    print(name)
+    print(description)
+    print(image_url)
+
+    #uncomment when you get api access
+    os.remove(file)
+
+    returnList = [name, description, image_url]
+    return returnList
+
+def submitPhoto(url, user, item):
+    try:
+        path = "./static/images/tmp/"
+        item = str(item)
+        user = str(user)
+        filename = user + '*' + item + ".jpg"
+        file=path + filename
+        img = Image.open(requests.get(url, stream=True).raw)
+        img.save(file)
+
+        code = uploadPhoto(filename, item, user)
+        os.remove(file)
+        print(code)
+    except:
+        pass
+
+
+
+
+
 ###Test Area###
 #code = uploadPhoto("test_subject1*17.png", 17, "test_subject1")
-
+#thing = productLookup(9781492053118, "test_subject1")
+#print("Name: " + thing[0] + "\nDescription: " + thing[1] + "\nURL: " + thing[2])
+#submitPhoto(thing[2], "test_subject1", "1")
