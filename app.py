@@ -296,31 +296,29 @@ def scannerLoad():
         space_id = space_id[1]
 
         print("Location: " + location + " Barcode: " + barcode + " Space: " + space_id)
-        item = productLookup(barcode, current_user.userID)
+        authorization = getAuthorization(space_id, current_user.userID)
 
-        name = item[0]
-        description = item[1]
-        photoURL = item[2]
-        quantity = get_quantity(name, current_user.userID)
-
-        #have to stop now, but see if you can get it to increment the quantity.
-        code = addItem(name, description, quantity + 1, None, space_id, current_user.userID, barcode)
-        item_id = get_itemID(name, current_user.userID)
-        submitPhoto(photoURL, current_user.userID, item_id)
-        if code == 409:
-            flash("Space name does not exist")
-            cu = current_user.userID
-            spaces = get_all_spaces(cu)
-            return render_template("loaditems.html", spaces=spaces)
+        if authorization == 409:
+            flash("That space doesn't exist")
+        elif authorization == 405:
+            flash("That's not your space. The authorities have been alerted. (Joke)")
         else:
-            flash("Success!")
-            cu = current_user.userID
-            spaces = get_all_spaces(cu)
-            return render_template("loaditems.html", spaces=spaces)
+            item = productLookup(barcode, current_user.userID)
 
+            name = item[0]
+            description = item[1]
+            photoURL = item[2]
+            quantity = get_quantity(name, current_user.userID)
+        #have to stop now, but see if you can get it to increment the quantity.
+            code = addItem(name, description, quantity + 1, None, space_id, current_user.userID, barcode)
+            item_id = get_itemID(name, current_user.userID)
+            submitPhoto(photoURL, current_user.userID, item_id)
+            if code == 409:
+                flash("Space name does not exist")
+            else:
+                flash(f"Success! {name} has been added!")
 
-        flash("Success!")
-        return render_template("scannerLoad.html")
+            return render_template("scannerLoad.html")
 
     return render_template("scannerLoad.html")
 

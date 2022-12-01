@@ -556,6 +556,22 @@ def get_itemID(name, owner):
     print(id)
     return id
 
+def getAuthorization(space, owner):
+    cur = connectToDB()
+    cur.execute("SELECT * FROM space WHERE space_id = ?", (space, ))
+    query = cur.fetchone()
+
+    if(query == None):
+        return 409
+    else:
+        cur.execute("SELECT * FROM space WHERE space_id = ? AND owner_id = ?", (space, owner))
+        query = cur.fetchone()
+        if(query == None):
+            return 405
+        else:
+            return 200
+
+
 """
 def appFunctionSearch(search_word):
     cur = connectToDB()
