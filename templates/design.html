@@ -97,7 +97,7 @@
         </section>
         <br>
 
-        <button id="qrButton" onclick="window.open('/qr?space_id={{ space_id }}')">QR</button>
+        <!-- <button id="qrButton" onclick="window.open('/qr?space_id={{ space_id }}')">QR</button> -->
     </div>
 
     <!-- Form for adding a space -->
@@ -178,14 +178,17 @@
 <!-- The actual footer buttons. -->
 <!-- ******************************************************************************-->
 <div class="footer">
-    <div class="col-xs-4">
+    <div class="col-xs-3">
         <a onclick="openAddForm()">Add Space</a>
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-3">
         <a onclick="openQuickAddForm()">Quick Add Item</a>
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-3">
         <a onclick="openDeleteForm()">Delete</a>
+    </div>
+    <div class="col-xs-3">
+        <a onclick="window.open('/qr?space_id={{ space_id }}')">Export QR</a>
     </div>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
