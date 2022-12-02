@@ -252,6 +252,7 @@ def loading_page():
         return render_template("loaditems.html", spaces = spaces)
 
 @app.route('/itemSearch', methods=["POST", "GET"])
+@login_required
 def findResults():
     if request.method == "POST" :
         search_word = request.form['search']
